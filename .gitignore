@@ -34,3 +34,26 @@ build/
 
 ### Var Amb ###
 .env
+
+# Build output
+/target/
+/bin/
+
+# IDE files
+/.idea/
+/*.iml
+*.class
+
+# Logs
+*.log
+
+# Arquivos temporários
+*.tmp
+*.swp
+
+# Configurações locais (exemplo: do IntelliJ)
+/out/
+
+# Diretórios de sistema operacional
+.DS_Store
+Thumbs.db
