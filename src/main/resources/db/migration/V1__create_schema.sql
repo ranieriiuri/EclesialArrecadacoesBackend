@@ -21,12 +21,25 @@ CREATE TYPE categoria_peca AS ENUM (
     'Acessório feminino infantil'
 );
 
+-- ENDEREÇOS (normalização p 'usuários')
+CREATE TABLE enderecos (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    cep VARCHAR(20),
+    logradouro VARCHAR(100),
+    numero VARCHAR(10),
+    complemento VARCHAR(100),
+    bairro VARCHAR(100),
+    cidade VARCHAR(100),
+    estado VARCHAR(50),
+    pais VARCHAR(50) DEFAULT 'Brasil'
+);
+
 -- USUÁRIOS DO SISTEMA
 CREATE TABLE usuarios (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     nome VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
-    endereco VARCHAR(100) NOT NULL,
+    endereco_id UUID REFERENCES enderecos(id),
     senha_hash VARCHAR(255) NOT NULL,
     mfa_secreto VARCHAR(255),
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -61,7 +74,9 @@ CREATE TABLE pecas (
     quantidade INT NOT NULL,
     preco DECIMAL(10,2) NOT NULL,
     doador_id UUID REFERENCES doadores(id),
+    evento_id UUID REFERENCES eventos(id), -- NOVO
     disponivel BOOLEAN NOT NULL DEFAULT TRUE,
+    observacoes TEXT,
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
