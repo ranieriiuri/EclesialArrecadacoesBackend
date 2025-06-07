@@ -1,5 +1,6 @@
 package com.ranieriiuri.eclesial_arrecadacoes.domain.service;
 
+import com.ranieriiuri.eclesial_arrecadacoes.domain.event.model.PecaCriadaEvent;
 import com.ranieriiuri.eclesial_arrecadacoes.domain.model.Peca;
 import com.ranieriiuri.eclesial_arrecadacoes.domain.repository.PecaRepository;
 import org.springframework.context.ApplicationEventPublisher;
