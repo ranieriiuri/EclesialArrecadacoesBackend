@@ -1,5 +1,6 @@
 package com.ranieriiuri.eclesial_arrecadacoes.domain.model;
 
+import com.ranieriiuri.eclesial_arrecadacoes.security.details.UsuarioDetails;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
@@ -47,5 +48,20 @@ public class Usuario {
     private LocalDateTime criadoEm = LocalDateTime.now();
 
     public void setIgrejaId(UUID currentTenant) {
+    }
+
+    public UUID getId() {
+    }
+
+    public String getEmail() {
+    }
+
+    public String getSenhaHash() {
+    }
+
+    public UsuarioDetails getIgreja() {
+    }
+
+    public String getCargo() {
     }
 }
