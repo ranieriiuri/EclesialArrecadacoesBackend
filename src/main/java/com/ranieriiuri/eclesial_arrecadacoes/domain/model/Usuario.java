@@ -45,4 +45,7 @@ public class Usuario {
 
     @Column(name = "criado_em")
     private LocalDateTime criadoEm = LocalDateTime.now();
+
+    public void setIgrejaId(UUID currentTenant) {
+    }
 }

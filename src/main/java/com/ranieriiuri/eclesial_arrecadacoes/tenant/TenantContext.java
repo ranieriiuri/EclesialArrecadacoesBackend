@@ -16,4 +16,8 @@ public class TenantContext {
     public static void clear() {
         currentTenant.remove();
     }
+
+    public static UUID getCurrentTenant() {
+        return null;
+    }
 }
