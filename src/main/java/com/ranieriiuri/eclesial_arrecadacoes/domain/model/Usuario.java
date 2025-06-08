@@ -63,5 +63,6 @@ public class Usuario {
     }
 
     public String getCargo() {
+        return null;
     }
 }

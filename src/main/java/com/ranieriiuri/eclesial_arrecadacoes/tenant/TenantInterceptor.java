@@ -1,5 +1,7 @@
 package com.ranieriiuri.eclesial_arrecadacoes.tenant;
 
+import com.ranieriiuri.eclesial_arrecadacoes.domain.model.Usuario;
+import com.ranieriiuri.eclesial_arrecadacoes.domain.repository.UsuarioRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +9,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
+
+import java.util.Optional;
 
 @Component
 public class TenantInterceptor implements HandlerInterceptor {

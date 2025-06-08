@@ -17,5 +17,8 @@ public class Peca {
 
     private String observacoes;
 
+    public String getNome() {
+    }
+
     // Getters, Setters, Construtores
 }
