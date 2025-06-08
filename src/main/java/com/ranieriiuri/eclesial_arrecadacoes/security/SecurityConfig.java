@@ -1,6 +1,7 @@
 package com.ranieriiuri.eclesial_arrecadacoes.security;
 
 import com.ranieriiuri.eclesial_arrecadacoes.security.details.UsuarioDetailsService;
+import com.ranieriiuri.eclesial_arrecadacoes.security.jwt.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,14 +13,18 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 public class SecurityConfig {
 
     private final UsuarioDetailsService usuarioDetailsService;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    public SecurityConfig(UsuarioDetailsService usuarioDetailsService) {
+    public SecurityConfig(UsuarioDetailsService usuarioDetailsService,
+                          JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.usuarioDetailsService = usuarioDetailsService;
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
     @Bean
@@ -28,10 +33,11 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**", "/public/**").permitAll() // endpoints públicos
+                        .requestMatchers("/auth/**", "/public/**").permitAll()
                         .anyRequest().authenticated()
                 )
-                .authenticationProvider(authenticationProvider());
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -56,4 +62,3 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 }
-

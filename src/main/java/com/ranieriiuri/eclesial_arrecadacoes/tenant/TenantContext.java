@@ -20,4 +20,7 @@ public class TenantContext {
     public static UUID getCurrentTenant() {
         return null;
     }
+
+    public static void setCurrentTenant(UUID uuid) {
+    }
 }
