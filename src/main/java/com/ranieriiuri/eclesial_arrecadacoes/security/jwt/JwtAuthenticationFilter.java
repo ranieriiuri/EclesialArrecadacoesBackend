@@ -6,6 +6,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory; // <-- importa SLF4J
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +19,7 @@ import java.io.IOException;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+    private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class); //usando o logger do spring p lidar com msgs de erro, ao ínves de 'system.out...'
     private final JwtService jwtService;
     private final UsuarioDetailsService userDetailsService;
 
@@ -33,7 +36,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String authHeader = request.getHeader("Authorization");
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            System.out.println("Authorization header ausente ou inválido.");
+            logger.warn("Authorization header ausente ou inválido."); //Aplicando o logger do spring
             filterChain.doFilter(request, response);
             return;
         }
@@ -59,7 +62,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
 
         } catch (Exception e) {
-            System.out.println("Erro ao processar JWT: " + e.getMessage());
+            logger.error("Erro ao processar JWT: {}", e.getMessage(), e);
         }
 
         filterChain.doFilter(request, response);
