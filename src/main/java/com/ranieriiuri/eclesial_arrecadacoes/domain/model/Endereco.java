@@ -20,13 +20,28 @@ public class Endereco {
     @UuidGenerator
     private UUID id;
 
+    @Column(length = 20)
     private String cep;
-    private String logradouro;
-    private String numero;
-    private String complemento;
-    private String bairro;
-    private String cidade;
-    private String estado;
-    private String pais;
-}
 
+    @Column(length = 100)
+    private String logradouro;
+
+    @Column(length = 10)
+    private String numero;
+
+    @Column(length = 100)
+    private String complemento;
+
+    @Column(length = 100)
+    private String bairro;
+
+    @Column(length = 100)
+    private String cidade;
+
+    @Column(length = 50)
+    private String estado;
+
+    @Column(length = 50)
+    @Builder.Default
+    private String pais = "Brasil";
+}

@@ -8,6 +8,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import com.ranieriiuri.eclesial_arrecadacoes.domain.enums.CategoriaPeca;
+
+
 @Entity
 @Table(name = "pecas")
 @Getter
@@ -29,7 +32,7 @@ public class Peca {
     private String cor;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "categoria", columnDefinition = "categoria_peca", nullable = false)
     private CategoriaPeca categoria;
 
     @Column(nullable = false)
