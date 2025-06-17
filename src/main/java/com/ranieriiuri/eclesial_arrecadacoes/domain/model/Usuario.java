@@ -14,7 +14,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Data
 public class Usuario {
 
     @Id
@@ -45,5 +44,5 @@ public class Usuario {
     private Igreja igreja;
 
     @Column(name = "criado_em")
-    private LocalDateTime criadoEm = LocalDateTime.now();
+    private LocalDateTime criadoEm;
 }

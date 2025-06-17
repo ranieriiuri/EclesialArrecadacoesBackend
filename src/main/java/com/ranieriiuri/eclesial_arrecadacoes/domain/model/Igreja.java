@@ -29,5 +29,5 @@ public class Igreja {
     private String estado;
 
     @Column(name = "criado_em")
-    private LocalDateTime criadoEm = LocalDateTime.now();
+    private LocalDateTime criadoEm;
 }
