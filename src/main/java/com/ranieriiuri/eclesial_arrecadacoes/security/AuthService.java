@@ -79,7 +79,7 @@ public class AuthService {
 
         usuarioRepository.save(novoUsuario);
 
-        String token = jwtService.generateToken(novoUsuario);
+        String token = jwtService.generateToken(novoUsuario.getEmail(), novoUsuario.getIgreja().getId());
         return new AuthResponse(token);
     }
 
