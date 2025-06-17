@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -14,6 +16,6 @@ public class RegisterRequest {
     private String email;
     private String senha;
     private String cargo;
-    private Long igrejaId;
-    private Long enderecoId;
+    private UUID enderecoId;
+    private UUID igrejaId;
 }
