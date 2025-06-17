@@ -2,6 +2,7 @@ package com.ranieriiuri.eclesial_arrecadacoes.security;
 
 import com.ranieriiuri.eclesial_arrecadacoes.security.dto.AuthRequest;
 import com.ranieriiuri.eclesial_arrecadacoes.security.dto.AuthResponse;
+import com.ranieriiuri.eclesial_arrecadacoes.security.dto.RegisterRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,4 +22,10 @@ public class AuthController {
         AuthResponse response = authService.login(request);
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/register")
+    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) {
+        return ResponseEntity.ok(authService.register(request));
+    }
+
 }
