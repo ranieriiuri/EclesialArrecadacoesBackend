@@ -61,12 +61,33 @@ public class AuthService {
     }
 
     public AuthResponse register(RegisterRequest request) {
-        Igreja igreja = igrejaRepository.findById(request.getIgrejaId())
-                .orElseThrow(() -> new RuntimeException("Igreja não encontrada"));
+        // Cria e salva a Igreja
+        Igreja igreja = Igreja.builder()
+                .nome(request.getIgreja().getNome())
+                .cnpj(request.getIgreja().getCnpj())
+                .cidade(request.getIgreja().getCidade())
+                .estado(request.getIgreja().getEstado())
+                .criadoEm(LocalDateTime.now())
+                .build();
+        igreja = igrejaRepository.save(igreja);
 
-        Endereco endereco = enderecoRepository.findById(request.getEnderecoId())
-                .orElseThrow(() -> new RuntimeException("Endereço não encontrado"));
+        // Cria e salva o Endereco (se fornecido)
+        Endereco endereco = null;
+        if (request.getEndereco() != null) {
+            endereco = Endereco.builder()
+                    .cep(request.getEndereco().getCep())
+                    .logradouro(request.getEndereco().getLogradouro())
+                    .numero(request.getEndereco().getNumero())
+                    .complemento(request.getEndereco().getComplemento())
+                    .bairro(request.getEndereco().getBairro())
+                    .cidade(request.getEndereco().getCidade())
+                    .estado(request.getEndereco().getEstado())
+                    .pais(request.getEndereco().getPais())
+                    .build();
+            endereco = enderecoRepository.save(endereco);
+        }
 
+        // Cria e salva o Usuário
         Usuario novoUsuario = Usuario.builder()
                 .nome(request.getNome())
                 .email(request.getEmail())
@@ -79,9 +100,8 @@ public class AuthService {
 
         usuarioRepository.save(novoUsuario);
 
-        String token = jwtService.generateToken(novoUsuario.getEmail(), novoUsuario.getIgreja().getId());
+        String token = jwtService.generateToken(novoUsuario.getEmail(), igreja.getId());
         return new AuthResponse(token);
     }
-
 
 }
