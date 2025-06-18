@@ -11,14 +11,14 @@ CREATE TYPE categoria_peca AS ENUM (
     'Roupa feminina adulta',
     'Roupa masculina infantil',
     'Roupa feminina infantil',
-    'Calçado masculino adulto',
-    'Calçado feminino adulto',
-    'Calçado masculino infantil',
-    'Calçado feminino infantil',
-    'Acessório masculino adulto',
-    'Acessório feminino adulto',
-    'Acessório masculino infantil',
-    'Acessório feminino infantil'
+    'Calcado masculino adulto',
+    'Calcado feminino adulto',
+    'Calcado masculino infantil',
+    'Calcado feminino infantil',
+    'Acessorio masculino adulto',
+    'Acessorio feminino adulto',
+    'Acessorio masculino infantil',
+    'Acessorio feminino infantil'
 );
 
 -- IGREJAS (MULTI-TENANCY)
@@ -87,11 +87,20 @@ CREATE TABLE pecas (
     categoria categoria_peca NOT NULL,
     quantidade INT NOT NULL,
     preco DECIMAL(10,2) NOT NULL,
-    doador_id UUID REFERENCES doadores(id),
     disponivel BOOLEAN NOT NULL DEFAULT TRUE,
     observacoes TEXT,
     igreja_id UUID REFERENCES igrejas(id), -- Multitenancy
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- REGISTRO DE DOACOES - RELACIONANDO PEÇA AO DOADOR DA OCASIAO
+CREATE TABLE doacoes (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    peca_id UUID NOT NULL REFERENCES pecas(id),
+    doador_id UUID NOT NULL REFERENCES doadores(id),
+    quantidade INT NOT NULL,
+    data_doacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    igreja_id UUID REFERENCES igrejas(id) -- multitenancy, controle por igreja
 );
 
 -- REGISTRO DE PEÇAS VENDIDAS
