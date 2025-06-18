@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.br.CPF;
 
 @Data
 @Builder
@@ -24,6 +25,10 @@ public class RegisterRequest {
 
     @NotBlank(message = "Senha é obrigatória")
     private String senha;
+
+    @CPF(message = "CPF inválido")
+    @NotBlank(message = "O CPF é obrigatório")
+    private String cpf;
 
     // Campo opcional, sem validação obrigatória
     private String cargo;

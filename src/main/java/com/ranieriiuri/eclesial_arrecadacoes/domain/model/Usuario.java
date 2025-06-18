@@ -30,6 +30,9 @@ public class Usuario {
     @Column(name = "senha_hash", nullable = false)
     private String senhaHash;
 
+    @Column(nullable = false, unique = true, length = 14)
+    private String cpf;
+
     @Column(name = "mfa_secreto")
     private String mfaSecreto;
 
@@ -38,6 +41,9 @@ public class Usuario {
     @ManyToOne
     @JoinColumn(name = "endereco_id")
     private Endereco endereco;
+
+    @Column(name = "foto_perfil")
+    private String fotoPerfil;
 
     @ManyToOne
     @JoinColumn(name = "igreja_id", nullable = false)

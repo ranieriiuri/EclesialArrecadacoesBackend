@@ -92,6 +92,7 @@ public class AuthService {
                 .nome(request.getNome())
                 .email(request.getEmail())
                 .senhaHash(passwordEncoder.encode(request.getSenha()))
+                .cpf(request.getCpf())
                 .cargo(request.getCargo())
                 .igreja(igreja)
                 .endereco(endereco)

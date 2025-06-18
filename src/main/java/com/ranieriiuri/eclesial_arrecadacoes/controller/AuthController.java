@@ -8,7 +8,11 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-// Classe da camada de controle, q recebe a req de login e retorna o token
+/**
+ * Controller responsável pela autenticação de usuários (login e registro).
+ * Recebe e valida os dados de entrada e delega a lógica para o AuthService.
+ */
+
 @RestController
 @RequestMapping("/auth")
 public class AuthController {

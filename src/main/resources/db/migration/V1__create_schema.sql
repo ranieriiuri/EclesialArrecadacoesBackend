@@ -51,8 +51,10 @@ CREATE TABLE usuarios (
     email VARCHAR(100) UNIQUE NOT NULL,
     senha_hash VARCHAR(255) NOT NULL,
     mfa_secreto VARCHAR(255),
+    cpf VARCHAR(14) NOT NULL UNIQUE,
     cargo VARCHAR(100),
     endereco_id UUID REFERENCES enderecos(id),
+    foto_perfil VARCHAR(255), -- para possivel foto de perfil
     igreja_id UUID REFERENCES igrejas(id), -- Multitenancy
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
