@@ -1,11 +1,6 @@
 package com.ranieriiuri.eclesial_arrecadacoes.security.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import java.util.UUID;
+import lombok.*;
 
 @Data
 @Builder
@@ -16,6 +11,6 @@ public class RegisterRequest {
     private String email;
     private String senha;
     private String cargo;
-    private UUID enderecoId;
-    private UUID igrejaId;
+    private EnderecoRequest endereco;
+    private IgrejaRequest igreja; // Esse modelo é pq o endereco e a igreja são criados ao criar o usuario
 }
