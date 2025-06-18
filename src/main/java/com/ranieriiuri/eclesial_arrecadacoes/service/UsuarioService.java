@@ -1,4 +1,4 @@
-package com.ranieriiuri.eclesial_arrecadacoes.domain.service;
+package com.ranieriiuri.eclesial_arrecadacoes.service;
 
 import com.ranieriiuri.eclesial_arrecadacoes.domain.model.Usuario;
 import com.ranieriiuri.eclesial_arrecadacoes.domain.repository.UsuarioRepository;

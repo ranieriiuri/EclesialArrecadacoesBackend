@@ -1,4 +1,4 @@
-package com.ranieriiuri.eclesial_arrecadacoes.security;
+package com.ranieriiuri.eclesial_arrecadacoes.service;
 
 import com.ranieriiuri.eclesial_arrecadacoes.domain.model.Igreja;
 import com.ranieriiuri.eclesial_arrecadacoes.domain.repository.IgrejaRepository;

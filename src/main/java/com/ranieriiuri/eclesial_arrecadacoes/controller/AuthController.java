@@ -1,5 +1,6 @@
-package com.ranieriiuri.eclesial_arrecadacoes.security;
+package com.ranieriiuri.eclesial_arrecadacoes.controller;
 
+import com.ranieriiuri.eclesial_arrecadacoes.service.AuthService;
 import com.ranieriiuri.eclesial_arrecadacoes.security.dto.AuthRequest;
 import com.ranieriiuri.eclesial_arrecadacoes.security.dto.AuthResponse;
 import com.ranieriiuri.eclesial_arrecadacoes.security.dto.RegisterRequest;
