@@ -90,6 +90,14 @@
 			<scope>runtime</scope>
 		</dependency>
 
+		<!-- Cloudinary para armazenar as fotos de perfil-->
+
+		<dependency>
+			<groupId>com.cloudinary</groupId>
+			<artifactId>cloudinary-http44</artifactId>
+			<version>1.33.0</version>
+		</dependency>
+
 		<!-- Testes -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
