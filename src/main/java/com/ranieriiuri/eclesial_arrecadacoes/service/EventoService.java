@@ -41,6 +41,11 @@ public class EventoService {
         return eventoRepository.save(evento);
     }
 
+    public Evento buscarPorId(UUID id) {
+        return eventoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Evento não encontrado com ID: " + id));
+    }
+
     public Evento atualizarDataInicio(UUID eventoId, LocalDate novaDataInicio) {
         Evento evento = eventoRepository.findById(eventoId)
                 .orElseThrow(() -> new EntityNotFoundException("Evento não encontrado"));
@@ -104,4 +109,16 @@ public class EventoService {
         UUID igrejaId = TenantContext.getCurrentTenant();
         return eventoRepository.findAllByIgrejaId(igrejaId);
     }
+
+    public void excluirEvento(UUID id) {
+        Evento evento = eventoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Evento não encontrado com ID: " + id));
+
+        if (evento.getStatus() == StatusEvento.FINALIZADO) {
+            throw new IllegalStateException("Não é possível excluir um evento já finalizado.");
+        }
+
+        eventoRepository.delete(evento);
+    }
+
 }

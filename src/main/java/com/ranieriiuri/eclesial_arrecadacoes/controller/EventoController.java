@@ -28,6 +28,12 @@ public class EventoController {
         return ResponseEntity.ok(novo);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Evento> buscarPorId(@PathVariable UUID id) {
+        Evento evento = eventoService.buscarPorId(id);
+        return ResponseEntity.ok(evento);
+    }
+
     // 🔹 Atualizar data de início de um evento específico
     @PatchMapping("/{id}/data-inicio")
     public ResponseEntity<Evento> atualizarDataInicio(
@@ -57,4 +63,11 @@ public class EventoController {
         List<Evento> eventos = eventoService.listarEventosDaIgrejaAtual();
         return ResponseEntity.ok(eventos);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> excluirEvento(@PathVariable UUID id) {
+        eventoService.excluirEvento(id);
+        return ResponseEntity.ok("Evento excluído com sucesso.");
+    }
+
 }
