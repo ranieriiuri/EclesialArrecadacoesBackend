@@ -37,13 +37,13 @@ CREATE TABLE igrejas (
 CREATE TABLE enderecos (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     cep VARCHAR(20),
-    logradouro VARCHAR(100),
+    logradouro VARCHAR(100) NOT NULL,
     numero VARCHAR(10),
     complemento VARCHAR(100),
     bairro VARCHAR(100),
-    cidade VARCHAR(100),
-    estado VARCHAR(50),
-    pais VARCHAR(50) DEFAULT 'Brasil'
+    cidade VARCHAR(100) NOT NULL,
+    estado VARCHAR(50) NOT NULL,
+    pais VARCHAR(50) NOT NULL DEFAULT 'Brasil'
 );
 
 -- USUÁRIOS

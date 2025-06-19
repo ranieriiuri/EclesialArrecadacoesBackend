@@ -1,6 +1,8 @@
 package com.ranieriiuri.eclesial_arrecadacoes.domain.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 
@@ -23,6 +25,7 @@ public class Endereco {
     @Column(length = 20)
     private String cep;
 
+    @NotBlank(message = "A rua é obrigatória.")
     @Column(length = 100)
     private String logradouro;
 
@@ -32,12 +35,15 @@ public class Endereco {
     @Column(length = 100)
     private String complemento;
 
+    @NotBlank(message = "O bairro é obrigatório.")
     @Column(length = 100)
     private String bairro;
 
+    @NotBlank(message = "A cidade é obrigatória.")
     @Column(length = 100)
     private String cidade;
 
+    @NotBlank(message = "O estado é obrigatório.")
     @Column(length = 50)
     private String estado;
 

@@ -1,6 +1,8 @@
 package com.ranieriiuri.eclesial_arrecadacoes.domain.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 
@@ -21,24 +23,30 @@ public class Usuario {
     @UuidGenerator
     private UUID id;
 
+    @NotBlank
     @Column(nullable = false)
     private String nome;
 
+    @NotBlank
+    @Email
     @Column(nullable = false, unique = true)
     private String email;
 
+    @NotBlank
     @Column(name = "senha_hash", nullable = false)
     private String senhaHash;
 
+    @NotBlank
     @Column(nullable = false, unique = true, length = 14)
     private String cpf;
+
 
     @Column(name = "mfa_secreto")
     private String mfaSecreto;
 
     private String cargo;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "endereco_id")
     private Endereco endereco;
 
