@@ -1,5 +1,6 @@
 package com.ranieriiuri.eclesial_arrecadacoes.domain.model;
 
+import com.ranieriiuri.eclesial_arrecadacoes.domain.enums.StatusEvento;
 import com.ranieriiuri.eclesial_arrecadacoes.domain.enums.TipoEvento;
 import jakarta.persistence.*;
 import lombok.*;
@@ -38,8 +39,9 @@ public class Evento {
     @Column(name = "data_fim")
     private LocalDate dataFim;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private boolean status = true;
+    private StatusEvento status;
 
     @ManyToOne
     @JoinColumn(name = "criado_por")

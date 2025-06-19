@@ -6,6 +6,8 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 -- ENUMS
 CREATE TYPE tipo_evento AS ENUM ('bazar', 'cantina', 'doacao', 'venda externa');
 
+CREATE TYPE status_evento AS ENUM ('planejando', 'em andamento', 'finalizado');
+
 CREATE TYPE categoria_peca AS ENUM (
     'Roupa masculina adulta',
     'Roupa feminina adulta',
@@ -75,7 +77,7 @@ CREATE TABLE eventos (
     descricao TEXT,
     data_inicio DATE,
     data_fim DATE,
-    status BOOLEAN NOT NULL DEFAULT TRUE,
+    status status_evento NOT NULL DEFAULT 'planejando',
     criado_por UUID REFERENCES usuarios(id),
     igreja_id UUID REFERENCES igrejas(id), -- Multitenancy
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP

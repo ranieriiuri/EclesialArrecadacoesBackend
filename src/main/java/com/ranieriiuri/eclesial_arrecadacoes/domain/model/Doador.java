@@ -1,6 +1,7 @@
 package com.ranieriiuri.eclesial_arrecadacoes.domain.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 
@@ -20,6 +21,7 @@ public class Doador {
     @UuidGenerator
     private UUID id;
 
+    @NotBlank(message = "O nome do doador é obrigatório.")
     @Column(nullable = false, length = 100)
     private String nome;
 
