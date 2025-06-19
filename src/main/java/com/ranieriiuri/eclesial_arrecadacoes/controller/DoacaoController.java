@@ -1,7 +1,9 @@
 package com.ranieriiuri.eclesial_arrecadacoes.controller;
 
 import com.ranieriiuri.eclesial_arrecadacoes.domain.model.Doacao;
+import com.ranieriiuri.eclesial_arrecadacoes.dto.RankingDoadorDTO;
 import com.ranieriiuri.eclesial_arrecadacoes.service.DoacaoService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +18,13 @@ public class DoacaoController {
 
     public DoacaoController(DoacaoService doacaoService) {
         this.doacaoService = doacaoService;
+    }
+
+    // 🔹 Registrar uma nova doação
+    @PostMapping
+    public ResponseEntity<Doacao> registrarDoacao(@Valid @RequestBody Doacao doacao) {
+        Doacao salva = doacaoService.salvarDoacao(doacao);
+        return ResponseEntity.ok(salva);
     }
 
     // 🔹 Listar todas as doações da igreja atual
@@ -40,5 +49,12 @@ public class DoacaoController {
     @GetMapping("/{id}")
     public ResponseEntity<Doacao> buscarPorId(@PathVariable UUID id) {
         return ResponseEntity.ok(doacaoService.buscarPorId(id));
+    }
+
+    // 🔹 Obter ranking de doadores da igreja atual
+    @GetMapping("/ranking")
+    public ResponseEntity<List<RankingDoadorDTO>> obterRankingDoadores() {
+        List<RankingDoadorDTO> ranking = doacaoService.obterRankingDoadores();
+        return ResponseEntity.ok(ranking);
     }
 }
