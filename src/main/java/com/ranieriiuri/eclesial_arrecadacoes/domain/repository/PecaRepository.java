@@ -1,5 +1,6 @@
 package com.ranieriiuri.eclesial_arrecadacoes.domain.repository;
 
+import com.ranieriiuri.eclesial_arrecadacoes.domain.enums.CategoriaPeca;
 import com.ranieriiuri.eclesial_arrecadacoes.domain.model.Peca;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -13,9 +14,9 @@ public interface PecaRepository extends JpaRepository<Peca, UUID> {
     // Exemplo de método adicional útil para filtrar por igreja
     List<Peca> findAllByIgrejaId(UUID igrejaId);
 
-    // Buscar peças disponíveis
-    List<Peca> findByDisponivelTrue();
+    List<Peca> findByIgrejaIdAndNomeIgnoreCaseContaining(UUID igrejaId, String nome);
 
-    // Buscar por nome (ignorando maiúsculas/minúsculas)
-    List<Peca> findByNomeIgnoreCaseContaining(String nome);
+    List<Peca> findByIgrejaIdAndDisponivelTrue(UUID igrejaId);
+
+    List<Peca> findByIgrejaIdAndCategoria(UUID igrejaId, CategoriaPeca categoria);
 }
