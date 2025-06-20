@@ -38,7 +38,7 @@ CREATE TABLE enderecos (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     cep VARCHAR(20),
     logradouro VARCHAR(100) NOT NULL,
-    numero VARCHAR(10),
+    numero VARCHAR(10) NOT NULL,
     complemento VARCHAR(100),
     bairro VARCHAR(100),
     cidade VARCHAR(100) NOT NULL,

@@ -29,6 +29,7 @@ public class Endereco {
     @Column(length = 100)
     private String logradouro;
 
+    @NotBlank(message = "O número (ou S/N) é obrigatório.")
     @Column(length = 10)
     private String numero;
 
@@ -47,6 +48,7 @@ public class Endereco {
     @Column(length = 50)
     private String estado;
 
+    @NotBlank(message = "O país é obrigatório (por padrão, Brasil).")
     @Column(length = 50)
     @Builder.Default
     private String pais = "Brasil";

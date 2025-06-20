@@ -26,6 +26,7 @@ public class Igreja {
 
     @Column(length = 20, unique = true)
     private String cnpj;
+
     private String cidade;
     private String estado;
 
