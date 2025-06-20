@@ -13,7 +13,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
  * Recebe e valida os dados de entrada e delega a lógica para o AuthService.
  */
 
-@SecurityRequirement(name = "bearerAuth")
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
