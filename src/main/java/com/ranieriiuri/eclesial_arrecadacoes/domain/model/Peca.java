@@ -48,10 +48,6 @@ public class Peca {
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal preco;
 
-    @ManyToOne
-    @JoinColumn(name = "doador_id")
-    private Doador doador;
-
     @Column(nullable = false)
     private boolean disponivel = true;
 

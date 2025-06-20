@@ -1,6 +1,7 @@
 package com.ranieriiuri.eclesial_arrecadacoes.domain.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 
@@ -22,27 +23,30 @@ public class Venda {
     @UuidGenerator
     private UUID id;
 
-    @ManyToOne
-    @JoinColumn(name = "peca_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "peca_id", nullable = false)
     private Peca peca;
 
-    @ManyToOne
-    @JoinColumn(name = "evento_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "evento_id", nullable = false)
     private Evento evento;
 
+    @Positive(message = "A quantidade deve ser maior que zero.")
     @Column(nullable = false)
     private int quantidade;
 
-    @Column(length = 100)
-    private String comprador;
+    @Size(max = 100)
+    private String comprador; // Pode ser opcional
 
-    @Column(name = "valor_arrecadado", nullable = false)
+    @NotNull(message = "O valor arrecadado é obrigatório.")
+    @DecimalMin(value = "0.00", inclusive = false, message = "O valor arrecadado deve ser positivo.")
+    @Column(name = "valor_arrecadado", nullable = false, precision = 10, scale = 2)
     private BigDecimal valorArrecadado;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "igreja_id", nullable = false)
     private Igreja igreja;
 
-    @Column(name = "data_venda")
+    @Column(name = "data_venda", nullable = false)
     private LocalDateTime dataVenda;
 }
