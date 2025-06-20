@@ -7,12 +7,13 @@ import com.ranieriiuri.eclesial_arrecadacoes.security.dto.RegisterRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 /**
  * Controller responsável pela autenticação de usuários (login e registro).
  * Recebe e valida os dados de entrada e delega a lógica para o AuthService.
  */
 
+@SecurityRequirement(name = "bearerAuth")
 @RestController
 @RequestMapping("/auth")
 public class AuthController {

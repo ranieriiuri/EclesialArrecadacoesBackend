@@ -11,6 +11,9 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
+@SecurityRequirement(name = "bearerAuth")
 @RestController
 @RequestMapping("/eventos")
 public class EventoController {
