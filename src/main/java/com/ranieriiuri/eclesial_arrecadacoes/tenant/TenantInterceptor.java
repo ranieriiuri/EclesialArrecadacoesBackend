@@ -22,16 +22,21 @@ public class TenantInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response,
                              Object handler) throws Exception {
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        if (auth != null && auth.isAuthenticated()) {
+        if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getPrincipal())) {
             String email = auth.getName();
             Optional<Usuario> usuario = usuarioRepository.findByEmail(email);
 
-            usuario.ifPresent(u -> TenantContext.setTenantId(u.getIgreja().getId()));
+            usuario.ifPresent(u -> {
+                if (u.getIgreja() != null && u.getIgreja().getId() != null) {
+                    TenantContext.setTenantId(u.getIgreja().getId());
+                }
+            });
         }
 
-        return true;
+        return true; // permite seguir a requisição normalmente
     }
 
     @Override
@@ -39,6 +44,7 @@ public class TenantInterceptor implements HandlerInterceptor {
                                 HttpServletResponse response,
                                 Object handler,
                                 Exception ex) throws Exception {
+        // Limpa o contexto após o fim da requisição
         TenantContext.clear();
     }
 }
