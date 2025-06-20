@@ -24,10 +24,11 @@ public class Igreja {
     @Column(nullable = false)
     private String nome;
 
+    @Column(length = 20, unique = true)
     private String cnpj;
     private String cidade;
     private String estado;
 
-    @Column(name = "criado_em")
+    @Column(name = "criado_em", nullable = false, updatable = false)
     private LocalDateTime criadoEm;
 }

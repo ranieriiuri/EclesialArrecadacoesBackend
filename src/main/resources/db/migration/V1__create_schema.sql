@@ -27,7 +27,7 @@ CREATE TYPE categoria_peca AS ENUM (
 CREATE TABLE igrejas (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     nome VARCHAR(100) NOT NULL,
-    cnpj VARCHAR(20),
+    cnpj VARCHAR(20) UNIQUE,
     cidade VARCHAR(100),
     estado VARCHAR(50),
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP

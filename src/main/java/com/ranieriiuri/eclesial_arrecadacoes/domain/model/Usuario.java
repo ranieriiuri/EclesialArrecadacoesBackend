@@ -46,14 +46,14 @@ public class Usuario {
 
     private String cargo;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "endereco_id")
     private Endereco endereco;
 
     @Column(name = "foto_perfil")
     private String fotoPerfil;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "igreja_id", nullable = false)
     private Igreja igreja;
 
