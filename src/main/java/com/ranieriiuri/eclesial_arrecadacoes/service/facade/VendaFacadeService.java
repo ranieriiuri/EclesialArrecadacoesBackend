@@ -2,7 +2,7 @@ package com.ranieriiuri.eclesial_arrecadacoes.service.facade;
 
 import com.ranieriiuri.eclesial_arrecadacoes.domain.model.*;
 import com.ranieriiuri.eclesial_arrecadacoes.domain.repository.VendaRepository;
-import com.ranieriiuri.eclesial_arrecadacoes.security.multitenancy.TenantContext;
+import com.ranieriiuri.eclesial_arrecadacoes.tenant.TenantContext;
 import com.ranieriiuri.eclesial_arrecadacoes.service.EventoService;
 import com.ranieriiuri.eclesial_arrecadacoes.service.PecaService;
 import jakarta.persistence.EntityNotFoundException;

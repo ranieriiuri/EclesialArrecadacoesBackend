@@ -11,12 +11,12 @@ import java.util.UUID;
 @Repository
 public interface VendaRepository extends JpaRepository<Venda, UUID> {
 
-    // 🔸 Listar todas as vendas de uma igreja
-    List<Venda> findByIgrejaId(UUID igrejaId);
-
     // 🔸 Filtrar vendas por período
     List<Venda> findByIgrejaIdAndDataVendaBetween(UUID igrejaId, LocalDateTime inicio, LocalDateTime fim);
 
     // 🔸 Filtrar vendas por evento específico
     List<Venda> findByIgrejaIdAndEventoId(UUID igrejaId, UUID eventoId);
+
+    // 🔸 Listar todas as vendas de uma igreja
+    List<Venda> findByIgrejaId(UUID igrejaId);
 }
