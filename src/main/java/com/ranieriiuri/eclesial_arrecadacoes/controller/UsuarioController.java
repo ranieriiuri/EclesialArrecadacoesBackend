@@ -1,6 +1,7 @@
 package com.ranieriiuri.eclesial_arrecadacoes.controller;
 
 import com.ranieriiuri.eclesial_arrecadacoes.domain.model.Usuario;
+import com.ranieriiuri.eclesial_arrecadacoes.dto.AlterarSenhaRequest;
 import com.ranieriiuri.eclesial_arrecadacoes.security.jwt.JwtService;
 import com.ranieriiuri.eclesial_arrecadacoes.service.CloudinaryService;
 import com.ranieriiuri.eclesial_arrecadacoes.service.UsuarioService;
@@ -29,7 +30,7 @@ public class UsuarioController {
 
     // 🔹 Buscar dados do usuário autenticado
     @GetMapping("/dados")
-    public ResponseEntity<Usuario> getCurrentUser(@RequestHeader("Authorization") String authHeader) {
+    public ResponseEntity<Usuario> buscarUsuarioPorEmail(@RequestHeader("Authorization") String authHeader) {
         String email = jwtService.extractEmail(authHeader.replace("Bearer ", ""));
         Usuario usuario = usuarioService.buscarUsuarioPorEmail(email);
         return ResponseEntity.ok(usuario);
@@ -37,7 +38,7 @@ public class UsuarioController {
 
     // 🔹 Atualizar dados pessoais
     @PutMapping("/dados")
-    public ResponseEntity<Usuario> updateCurrentUser(@RequestHeader("Authorization") String authHeader,
+    public ResponseEntity<Usuario> atualizarUsuarioLogado(@RequestHeader("Authorization") String authHeader,
                                                      @Valid @RequestBody Usuario updatedData) {
         String email = jwtService.extractEmail(authHeader.replace("Bearer ", ""));
         Usuario updated = usuarioService.atualizarUsuarioLogado(email, updatedData);
@@ -46,7 +47,7 @@ public class UsuarioController {
 
     // 🔹 Atualizar foto de perfil
     @PutMapping("/dados/foto")
-    public ResponseEntity<String> uploadProfilePhoto(@RequestHeader("Authorization") String authHeader,
+    public ResponseEntity<String> atualizarFotoPerfil(@RequestHeader("Authorization") String authHeader,
                                                      @RequestParam("foto") MultipartFile foto) {
         // Extrai o email do token JWT
         String email = jwtService.extractEmail(authHeader.replace("Bearer ", ""));
@@ -55,16 +56,22 @@ public class UsuarioController {
         String urlFoto = cloudinaryService.uploadImage(foto);
 
         // Atualiza o usuário com a URL da foto
-        usuarioService.atualizarFoto(email, urlFoto);
+        usuarioService.atualizarFotoPerfil(email, urlFoto);
 
         // Retorna a URL da foto para o front
         return ResponseEntity.ok(urlFoto);
     }
 
+    @PutMapping("/alterar-senha")
+    @SecurityRequirement(name = "bearer-key")
+    public ResponseEntity<Void> alterarSenha(@Valid @RequestBody AlterarSenhaRequest request) {
+        usuarioService.alterarSenhaUsuarioLogado(request);
+        return ResponseEntity.noContent().build();
+    }
 
     // 🔹 Deletar a conta do usuário autenticado
     @DeleteMapping("/dados")
-    public ResponseEntity<String> deleteCurrentUser(@RequestHeader("Authorization") String authHeader) {
+    public ResponseEntity<String> excluirUsuarioLogado(@RequestHeader("Authorization") String authHeader) {
         String email = jwtService.extractEmail(authHeader.replace("Bearer ", ""));
         usuarioService.excluirUsuarioLogado(email);
         return ResponseEntity.ok("Usuário excluído com sucesso.");

@@ -2,8 +2,12 @@ package com.ranieriiuri.eclesial_arrecadacoes.service;
 
 import com.ranieriiuri.eclesial_arrecadacoes.domain.model.Usuario;
 import com.ranieriiuri.eclesial_arrecadacoes.domain.repository.UsuarioRepository;
+import com.ranieriiuri.eclesial_arrecadacoes.dto.AlterarSenhaRequest;
 import com.ranieriiuri.eclesial_arrecadacoes.tenant.TenantContext;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,14 +26,13 @@ public class UsuarioService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public List<Usuario> listarUsuariosDaIgrejaAtual() {
-        UUID igrejaId = TenantContext.getCurrentTenant();
-        return usuarioRepository.findAllByIgrejaId(igrejaId);
-    }
-
     public Usuario buscarUsuarioPorEmail(String email) {
         return usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
+    }
+
+    public Optional<Usuario> buscarPorId(UUID id) {
+        return usuarioRepository.findById(id);
     }
 
     public Usuario atualizarUsuarioLogado(String email, Usuario dadosAtualizados) {
@@ -47,22 +50,37 @@ public class UsuarioService {
         return usuarioRepository.save(usuario);
     }
 
-    public void excluirUsuarioLogado(String email) {
-        Usuario usuario = buscarUsuarioPorEmail(email);
-        usuarioRepository.delete(usuario);
+    @Transactional
+    public void alterarSenhaUsuarioLogado(AlterarSenhaRequest request) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
+
+        if (!passwordEncoder.matches(request.getSenhaAtual(), usuario.getSenhaHash())) {
+            throw new IllegalArgumentException("Senha atual incorreta.");
+        }
+
+        usuario.setSenhaHash(passwordEncoder.encode(request.getNovaSenha()));
+        usuarioRepository.save(usuario);
     }
 
-    public void atualizarFoto(String email, String urlFoto) {
+    public void atualizarFotoPerfil(String email, String urlFoto) {
         Usuario usuario = buscarUsuarioPorEmail(email);
         usuario.setFotoPerfil(urlFoto);
         usuarioRepository.save(usuario);
     }
 
-    public Optional<Usuario> buscarPorId(UUID id) {
-        return usuarioRepository.findById(id);
+    public List<Usuario> listarTodosUsuarios() {
+        UUID igrejaId = TenantContext.getCurrentTenant();
+        return usuarioRepository.findAllByIgrejaId(igrejaId);
     }
 
     public List<Usuario> buscarTodos() {
         return usuarioRepository.findAll();
+    }
+
+    public void excluirUsuarioLogado(String email) {
+        Usuario usuario = buscarUsuarioPorEmail(email);
+        usuarioRepository.delete(usuario);
     }
 }
