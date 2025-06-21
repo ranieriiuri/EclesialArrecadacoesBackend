@@ -118,3 +118,13 @@ CREATE TABLE vendas (
     igreja_id UUID REFERENCES igrejas(id), -- Multitenancy
     data_venda TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- TABELA UTILIZADA PARA GERAR TOKEN (TEMPORARIO) PARA RECUPERAR SENHA
+CREATE TABLE tokens_recuperacao_senha (
+    id UUID PRIMARY KEY,
+    token VARCHAR(255) NOT NULL UNIQUE,
+    usuario_id UUID NOT NULL,
+    expira_em TIMESTAMP NOT NULL,
+    usado BOOLEAN NOT NULL DEFAULT FALSE,
+    CONSTRAINT fk_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+);
