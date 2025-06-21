@@ -38,9 +38,20 @@ public class DoadorService {
         return doadorRepository.save(doador);
     }
 
-    public List<Doador> listarDoadoresDaIgrejaAtual() {
+    public Doador buscarDoadorPorId(UUID doadorId) {
         UUID igrejaId = TenantContext.getCurrentTenant();
-        return doadorRepository.findAllByIgrejaId(igrejaId);
+        if (igrejaId == null) {
+            throw new IllegalStateException("Igreja não identificada.");
+        }
+
+        Doador doador = doadorRepository.findById(doadorId)
+                .orElseThrow(() -> new EntityNotFoundException("Doador não encontrado."));
+
+        if (!doador.getIgreja().getId().equals(igrejaId)) {
+            throw new IllegalArgumentException("Doador não pertence à igreja do usuário atual.");
+        }
+
+        return doador;
     }
 
     public Doador atualizarDoador(UUID id, Doador dadosAtualizados) {
@@ -52,6 +63,11 @@ public class DoadorService {
         doador.setObservacoes(dadosAtualizados.getObservacoes());
 
         return doadorRepository.save(doador);
+    }
+
+    public List<Doador> listarDoadores() {
+        UUID igrejaId = TenantContext.getCurrentTenant();
+        return doadorRepository.findAllByIgrejaId(igrejaId);
     }
 
     public void excluirDoador(UUID id) {

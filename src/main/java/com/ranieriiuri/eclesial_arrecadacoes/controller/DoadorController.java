@@ -28,16 +28,22 @@ public class DoadorController {
         return ResponseEntity.ok(doadorService.criarDoador(doador));
     }
 
-    // 🔹 Listar todos os doadores da igreja atual
-    @GetMapping
-    public ResponseEntity<List<Doador>> listarDoadores() {
-        return ResponseEntity.ok(doadorService.listarDoadoresDaIgrejaAtual());
+    @GetMapping("/{id}")
+    public ResponseEntity<Doador> buscarDoadorPorId(@PathVariable UUID id) {
+        Doador doador = doadorService.buscarDoadorPorId(id);
+        return ResponseEntity.ok(doador);
     }
 
     // 🔹 Atualizar dados do doador
     @PutMapping("/{id}")
     public ResponseEntity<Doador> atualizarDoador(@PathVariable UUID id, @Valid @RequestBody Doador doador) {
         return ResponseEntity.ok(doadorService.atualizarDoador(id, doador));
+    }
+
+    // 🔹 Listar todos os doadores da igreja atual
+    @GetMapping
+    public ResponseEntity<List<Doador>> listarDoadores() {
+        return ResponseEntity.ok(doadorService.listarDoadores());
     }
 
     // 🔹 Excluir doador
