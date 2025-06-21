@@ -75,10 +75,6 @@ public class UsuarioService {
         return usuarioRepository.findAllByIgrejaId(igrejaId);
     }
 
-    public List<Usuario> buscarTodos() {
-        return usuarioRepository.findAll();
-    }
-
     public void excluirUsuarioLogado(String email) {
         Usuario usuario = buscarUsuarioPorEmail(email);
         usuarioRepository.delete(usuario);
