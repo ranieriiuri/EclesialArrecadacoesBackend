@@ -40,25 +40,26 @@ public class CadastroPecaFacadeService {
         Igreja igreja = igrejaRepository.findById(igrejaId)
                 .orElseThrow(() -> new EntityNotFoundException("Igreja não encontrada."));
 
-        // 🔹 Buscar doador existente por ID, se informado corretamente
+        // Buscar doador existente por ID, se informado corretamente
         Doador doador;
-        UUID doadorUUID = null;
         if (request.getDoadorId() != null && !request.getDoadorId().isBlank()) {
+            UUID doadorUUID;
             try {
                 doadorUUID = UUID.fromString(request.getDoadorId());
-                doador = doadorRepository.findById(doadorUUID)
-                        .orElseThrow(() -> new EntityNotFoundException("Doador não encontrado com o ID informado."));
             } catch (IllegalArgumentException e) {
                 throw new IllegalArgumentException("ID do doador inválido.");
             }
+            doador = doadorRepository.findById(doadorUUID)
+                    .orElseThrow(() -> new EntityNotFoundException("Doador não encontrado com o ID informado."));
         } else {
-            // 🔹 Criar novo doador
+            // Criar novo doador
             if (request.getNomeDoador() == null || request.getNomeDoador().isBlank()) {
                 throw new IllegalArgumentException("Nome do doador é obrigatório quando o ID não é informado.");
             }
 
             boolean doadorExiste = doadorRepository.existsByNomeIgnoreCaseAndContatoIgnoreCase(
-                    request.getNomeDoador(), request.getContato() != null ? request.getContato() : ""
+                    request.getNomeDoador(),
+                    request.getContato() != null ? request.getContato() : ""
             );
             if (doadorExiste) {
                 throw new IllegalArgumentException("Já existe um doador com o mesmo nome e contato.");
@@ -74,9 +75,8 @@ public class CadastroPecaFacadeService {
             doador = doadorRepository.save(doador);
         }
 
-        // 🔹 Criar e salvar peça
         Peca peca = Peca.builder()
-                .nome(request.getNomePeca())
+                .nome(request.getNome())
                 .cor(request.getCor())
                 .categoria(request.getCategoria())
                 .quantidade(request.getQuantidade())
@@ -90,7 +90,6 @@ public class CadastroPecaFacadeService {
         peca = pecaRepository.save(peca);
         eventPublisher.publishEvent(new PecaCriadaEvent(this, peca));
 
-        // 🔹 Criar e salvar doação
         Doacao doacao = Doacao.builder()
                 .peca(peca)
                 .doador(doador)
@@ -101,4 +100,5 @@ public class CadastroPecaFacadeService {
 
         return doacaoRepository.save(doacao);
     }
+
 }

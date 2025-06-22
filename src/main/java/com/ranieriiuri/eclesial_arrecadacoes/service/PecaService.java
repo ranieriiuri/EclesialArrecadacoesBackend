@@ -1,22 +1,15 @@
 package com.ranieriiuri.eclesial_arrecadacoes.service;
 
-import com.ranieriiuri.eclesial_arrecadacoes.domain.enums.CategoriaPeca;
-import com.ranieriiuri.eclesial_arrecadacoes.domain.event.model.PecaCriadaEvent;
-import com.ranieriiuri.eclesial_arrecadacoes.domain.model.Doador;
-import com.ranieriiuri.eclesial_arrecadacoes.domain.model.Doacao;
-import com.ranieriiuri.eclesial_arrecadacoes.domain.model.Igreja;
 import com.ranieriiuri.eclesial_arrecadacoes.domain.model.Peca;
 import com.ranieriiuri.eclesial_arrecadacoes.domain.repository.DoadorRepository;
 import com.ranieriiuri.eclesial_arrecadacoes.domain.repository.DoacaoRepository;
 import com.ranieriiuri.eclesial_arrecadacoes.domain.repository.IgrejaRepository;
 import com.ranieriiuri.eclesial_arrecadacoes.domain.repository.PecaRepository;
-import com.ranieriiuri.eclesial_arrecadacoes.dto.NovaPecaComRegistroDoacaoRequest;
 import com.ranieriiuri.eclesial_arrecadacoes.tenant.TenantContext;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -81,7 +74,7 @@ public class PecaService {
         return pecaRepository.findByIgrejaIdAndDisponivelTrue(igrejaId);
     }
 
-    public List<Peca> listarPorCategoria(CategoriaPeca categoria) {
+    public List<Peca> listarPorCategoria(String categoria) {
         UUID igrejaId = TenantContext.getCurrentTenant();
         return pecaRepository.findByIgrejaIdAndCategoria(igrejaId, categoria);
     }

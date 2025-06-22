@@ -11,9 +11,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import com.ranieriiuri.eclesial_arrecadacoes.domain.enums.CategoriaPeca;
-
-
 @Entity
 @Table(name = "pecas")
 @Getter
@@ -35,10 +32,8 @@ public class Peca {
     @Column(length = 50)
     private String cor;
 
-    @NotNull(message = "A categoria é obrigatória.")
-    @Enumerated(EnumType.STRING)
-    @Column(name = "categoria", columnDefinition = "categoria_peca", nullable = false)
-    private CategoriaPeca categoria;
+    @Column(name = "categoria", length = 100, nullable = false)
+    private String categoria;
 
     @Column(nullable = false)
     private int quantidade;

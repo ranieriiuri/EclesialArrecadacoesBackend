@@ -1,6 +1,5 @@
 package com.ranieriiuri.eclesial_arrecadacoes.controller;
 
-import com.ranieriiuri.eclesial_arrecadacoes.domain.enums.CategoriaPeca;
 import com.ranieriiuri.eclesial_arrecadacoes.domain.model.Doacao;
 import com.ranieriiuri.eclesial_arrecadacoes.dto.NovaPecaComRegistroDoacaoRequest;
 import com.ranieriiuri.eclesial_arrecadacoes.domain.model.Peca;
@@ -32,10 +31,10 @@ public class PecaController {
     // Metodo utilizando um facade para cadastro da peca, doador e registro de doação automatico
     @PostMapping("/pecas-com-doacao")
     public ResponseEntity<Doacao> registrarPecaComDoacao(
-            @Valid @RequestBody NovaPecaComRegistroDoacaoRequest request // ✅ Agora sim
+            @Valid @RequestBody NovaPecaComRegistroDoacaoRequest request
     ) {
         Doacao doacao = cadastroPecaFacadeService.registrarPecaComDoacao(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(doacao); // ✅ NOVA LINHA
+        return ResponseEntity.status(HttpStatus.CREATED).body(doacao);
     }
 
     // 🔹 Buscar peça por ID
@@ -78,7 +77,7 @@ public class PecaController {
 
     // 🔹 Buscar peças por categoria
     @GetMapping("/categoria")
-    public ResponseEntity<List<Peca>> listarPecasPorCategoria(@RequestParam CategoriaPeca categoria) {
+    public ResponseEntity<List<Peca>> listarPecasPorCategoria(@RequestParam String categoria) {
         return ResponseEntity.ok(pecaService.listarPorCategoria(categoria));
     }
 
