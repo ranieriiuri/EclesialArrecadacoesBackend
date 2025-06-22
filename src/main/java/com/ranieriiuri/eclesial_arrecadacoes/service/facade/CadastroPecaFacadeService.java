@@ -42,10 +42,25 @@ public class CadastroPecaFacadeService {
 
         // 🔹 Buscar ou criar doador
         Doador doador;
-        if (request.getDoadorId() != null) {
+        if (request.getDoadorId() != null && !request.getDoadorId().toString().isBlank()) {
+            // Buscar doador existente
             doador = doadorRepository.findById(request.getDoadorId())
                     .orElseThrow(() -> new EntityNotFoundException("Doador não encontrado"));
         } else {
+            // Validar nome obrigatório para novo doador
+            if (request.getNomeDoador() == null || request.getNomeDoador().isBlank()) {
+                throw new IllegalArgumentException("Nome do doador é obrigatório quando o ID não é informado.");
+            }
+
+            // Verificar duplicidade
+            boolean doadorExiste = doadorRepository.existsByNomeIgnoreCaseAndContatoIgnoreCase(
+                    request.getNomeDoador(), request.getContato() != null ? request.getContato() : ""
+            );
+            if (doadorExiste) {
+                throw new IllegalArgumentException("Já existe um doador com o mesmo nome e contato.");
+            }
+
+            // Criar novo doador
             doador = Doador.builder()
                     .nome(request.getNomeDoador())
                     .contato(request.getContato())
