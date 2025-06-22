@@ -38,21 +38,25 @@ public class CadastroPecaFacadeService {
         if (igrejaId == null) throw new IllegalStateException("Igreja não identificada.");
 
         Igreja igreja = igrejaRepository.findById(igrejaId)
-                .orElseThrow(() -> new EntityNotFoundException("Igreja não encontrada"));
+                .orElseThrow(() -> new EntityNotFoundException("Igreja não encontrada."));
 
-        // 🔹 Buscar ou criar doador
+        // 🔹 Buscar doador existente por ID, se informado corretamente
         Doador doador;
-        if (request.getDoadorId() != null && !request.getDoadorId().toString().isBlank()) {
-            // Buscar doador existente
-            doador = doadorRepository.findById(request.getDoadorId())
-                    .orElseThrow(() -> new EntityNotFoundException("Doador não encontrado"));
+        UUID doadorUUID = null;
+        if (request.getDoadorId() != null && !request.getDoadorId().isBlank()) {
+            try {
+                doadorUUID = UUID.fromString(request.getDoadorId());
+                doador = doadorRepository.findById(doadorUUID)
+                        .orElseThrow(() -> new EntityNotFoundException("Doador não encontrado com o ID informado."));
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("ID do doador inválido.");
+            }
         } else {
-            // Validar nome obrigatório para novo doador
+            // 🔹 Criar novo doador
             if (request.getNomeDoador() == null || request.getNomeDoador().isBlank()) {
                 throw new IllegalArgumentException("Nome do doador é obrigatório quando o ID não é informado.");
             }
 
-            // Verificar duplicidade
             boolean doadorExiste = doadorRepository.existsByNomeIgnoreCaseAndContatoIgnoreCase(
                     request.getNomeDoador(), request.getContato() != null ? request.getContato() : ""
             );
@@ -60,17 +64,17 @@ public class CadastroPecaFacadeService {
                 throw new IllegalArgumentException("Já existe um doador com o mesmo nome e contato.");
             }
 
-            // Criar novo doador
             doador = Doador.builder()
                     .nome(request.getNomeDoador())
                     .contato(request.getContato())
                     .observacoes(request.getObservacoesDoador())
                     .igreja(igreja)
                     .build();
+
             doador = doadorRepository.save(doador);
         }
 
-        // 🔹 Criar peça
+        // 🔹 Criar e salvar peça
         Peca peca = Peca.builder()
                 .nome(request.getNomePeca())
                 .cor(request.getCor())
@@ -86,7 +90,7 @@ public class CadastroPecaFacadeService {
         peca = pecaRepository.save(peca);
         eventPublisher.publishEvent(new PecaCriadaEvent(this, peca));
 
-        // 🔹 Registrar doação
+        // 🔹 Criar e salvar doação
         Doacao doacao = Doacao.builder()
                 .peca(peca)
                 .doador(doador)

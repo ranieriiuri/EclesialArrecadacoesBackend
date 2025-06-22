@@ -7,6 +7,7 @@ import com.ranieriiuri.eclesial_arrecadacoes.domain.model.Peca;
 import com.ranieriiuri.eclesial_arrecadacoes.service.PecaService;
 import com.ranieriiuri.eclesial_arrecadacoes.service.facade.CadastroPecaFacadeService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,9 +31,11 @@ public class PecaController {
 
     // Metodo utilizando um facade para cadastro da peca, doador e registro de doação automatico
     @PostMapping("/pecas-com-doacao")
-    public ResponseEntity<Doacao> registrarPecaComDoacao(@RequestBody NovaPecaComRegistroDoacaoRequest request) {
+    public ResponseEntity<Doacao> registrarPecaComDoacao(
+            @Valid @RequestBody NovaPecaComRegistroDoacaoRequest request // ✅ Agora sim
+    ) {
         Doacao doacao = cadastroPecaFacadeService.registrarPecaComDoacao(request);
-        return ResponseEntity.ok(doacao);
+        return ResponseEntity.status(HttpStatus.CREATED).body(doacao); // ✅ NOVA LINHA
     }
 
     // 🔹 Buscar peça por ID
