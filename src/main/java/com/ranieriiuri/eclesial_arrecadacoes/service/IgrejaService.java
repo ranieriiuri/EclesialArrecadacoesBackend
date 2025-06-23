@@ -2,8 +2,10 @@ package com.ranieriiuri.eclesial_arrecadacoes.service;
 
 import com.ranieriiuri.eclesial_arrecadacoes.domain.model.Igreja;
 import com.ranieriiuri.eclesial_arrecadacoes.domain.repository.IgrejaRepository;
+import com.ranieriiuri.eclesial_arrecadacoes.dto.IgrejaUpdateRequest;
 import com.ranieriiuri.eclesial_arrecadacoes.tenant.TenantContext;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -17,7 +19,7 @@ public class IgrejaService {
         this.igrejaRepository = igrejaRepository;
     }
 
-    public Igreja atualizarIgreja(Igreja nova) {
+    public Igreja atualizarIgreja(@Valid IgrejaUpdateRequest nova) {
         UUID igrejaId = TenantContext.getCurrentTenant();
         if (igrejaId == null) {
             throw new IllegalStateException("Igreja não identificada no contexto.");

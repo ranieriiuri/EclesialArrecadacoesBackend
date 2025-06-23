@@ -41,7 +41,6 @@ public class VendaController {
         return ResponseEntity.ok(venda);
     }
 
-
     // 🔹 Relatórios por período
     @GetMapping("/por-periodo")
     public ResponseEntity<List<Venda>> listarPorPeriodo(

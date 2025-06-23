@@ -1,6 +1,7 @@
 package com.ranieriiuri.eclesial_arrecadacoes.controller;
 
 import com.ranieriiuri.eclesial_arrecadacoes.domain.model.Igreja;
+import com.ranieriiuri.eclesial_arrecadacoes.dto.IgrejaUpdateRequest;
 import com.ranieriiuri.eclesial_arrecadacoes.service.IgrejaService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -22,9 +23,8 @@ public class IgrejaController {
     }
 
     // Atualiza a igreja atual (com base no TenantContext)
-    @PutMapping("/atualizar")
-    public ResponseEntity<Igreja> atualizarIgreja(@RequestBody Igreja nova) {
-        Igreja atualizada = igrejaService.atualizarIgreja(nova);
+    public ResponseEntity<Igreja> atualizarIgreja(@Valid @RequestBody IgrejaUpdateRequest request) {
+        Igreja atualizada = igrejaService.atualizarIgreja(request);
         return ResponseEntity.ok(atualizada);
     }
 }
