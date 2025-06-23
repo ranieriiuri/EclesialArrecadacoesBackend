@@ -43,12 +43,15 @@ public class AuthController {
     public ResponseEntity<UserResponse> me(@AuthenticationPrincipal UsuarioDetails usuarioDetails) {
         return ResponseEntity.ok(new UserResponse(
                 usuarioDetails.getId(),
-                usuarioDetails.getNome(),    // ✅ agora disponível
-                usuarioDetails.getUsername(),   // ou getEmail()
+                usuarioDetails.getNome(),          // nome completo do usuário
+                usuarioDetails.getEmail(),         // email (caso queira trocar para .getUsername(), também funciona)
+                usuarioDetails.getCargo(),
+                usuarioDetails.getFotoPerfil(),
                 usuarioDetails.getIgrejaId(),
-                usuarioDetails.getCargo()
+                usuarioDetails.getIgrejaNome()
         ));
     }
+
 
 
 }

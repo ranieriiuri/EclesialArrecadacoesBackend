@@ -11,8 +11,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class UsuarioDetailsService implements UserDetailsService {
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+    private final UsuarioRepository usuarioRepository;
+
+    public UsuarioDetailsService(UsuarioRepository usuarioRepository) {
+        this.usuarioRepository = usuarioRepository;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -21,11 +24,13 @@ public class UsuarioDetailsService implements UserDetailsService {
 
         return new UsuarioDetails(
                 usuario.getId(),
-                usuario.getNome(), // ✅ adiciona aqui
+                usuario.getNome(),                         // <- novo campo
                 usuario.getEmail(),
-                usuario.getSenhaHash(), // ou getSenha(), dependendo do nome
+                usuario.getSenhaHash(),
+                usuario.getCargo(),
+                usuario.getFotoPerfil(),
                 usuario.getIgreja().getId(),
-                usuario.getCargo()
+                usuario.getIgreja().getNome()
         );
     }
 }

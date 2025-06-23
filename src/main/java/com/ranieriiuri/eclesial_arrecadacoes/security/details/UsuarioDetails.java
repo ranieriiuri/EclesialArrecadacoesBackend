@@ -1,45 +1,68 @@
 package com.ranieriiuri.eclesial_arrecadacoes.security.details;
 
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.UUID;
 
 public class UsuarioDetails implements UserDetails {
+
     private UUID id;
-    private String nome; // ✅ novo campo
+    private String nome;
     private String email;
     private String senha;
-    private UUID igrejaId;
     private String cargo;
+    private String fotoPerfil;
+    private UUID igrejaId;
+    private String igrejaNome;
 
-    public UsuarioDetails(UUID id, String nome, String email, String senha, UUID igrejaId, String cargo) {
+    public UsuarioDetails(
+            UUID id,
+            String nome,
+            String email,
+            String senha,
+            String cargo,
+            String fotoPerfil,
+            UUID igrejaId,
+            String igrejaNome
+    ) {
         this.id = id;
         this.nome = nome;
         this.email = email;
         this.senha = senha;
-        this.igrejaId = igrejaId;
         this.cargo = cargo;
+        this.fotoPerfil = fotoPerfil;
+        this.igrejaId = igrejaId;
+        this.igrejaNome = igrejaNome;
     }
 
     public UUID getId() {
         return id;
     }
 
-    public UUID getIgrejaId() {
-        return igrejaId;
+    public String getNome() {
+        return nome;
     }
 
-    public String getNome() { return nome; }
+    public String getEmail() {
+        return email;
+    }
 
     public String getCargo() {
         return cargo;
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null; // ou retorne as permissões, se houver
+    public String getFotoPerfil() {
+        return fotoPerfil;
+    }
+
+    public UUID getIgrejaId() {
+        return igrejaId;
+    }
+
+    public String getIgrejaNome() {
+        return igrejaNome;
     }
 
     @Override
@@ -47,21 +70,34 @@ public class UsuarioDetails implements UserDetails {
         return senha;
     }
 
+    // Obrigatório pelo contrato da interface UserDetails
     @Override
     public String getUsername() {
         return email;
     }
 
     @Override
-    public boolean isAccountNonExpired() { return true; }
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null; // ou retornar permissões reais
+    }
 
     @Override
-    public boolean isAccountNonLocked() { return true; }
+    public boolean isAccountNonExpired() {
+        return true;
+    }
 
     @Override
-    public boolean isCredentialsNonExpired() { return true; }
+    public boolean isAccountNonLocked() {
+        return true;
+    }
 
     @Override
-    public boolean isEnabled() { return true; }
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }
-
