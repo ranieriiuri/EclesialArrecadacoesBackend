@@ -61,4 +61,25 @@ public class VendaController {
     public ResponseEntity<List<VendaResumoDTO>> listarTodas() {
         return ResponseEntity.ok(vendaService.listarTodas());
     }
+
+    //  Geradores de relatórios:
+
+    @GetMapping("/relatorios/periodo")
+    public ResponseEntity<RelatorioVendasDTO> relatorioPorPeriodo(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime inicio,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fim
+    ) {
+        return ResponseEntity.ok(vendaService.gerarRelatorioPorPeriodo(inicio, fim));
+    }
+
+    @GetMapping("/relatorios/totais")
+    public ResponseEntity<RelatorioVendasDTO> relatorioTotal() {
+        return ResponseEntity.ok(vendaService.gerarRelatorioTotal());
+    }
+
+    @GetMapping("/relatorios/por-evento/{eventoId}")
+    public ResponseEntity<RelatorioVendasDTO> relatorioPorEvento(@PathVariable UUID eventoId) {
+        return ResponseEntity.ok(vendaService.gerarRelatorioPorEvento(eventoId));
+    }
+
 }

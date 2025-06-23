@@ -2,6 +2,7 @@ package com.ranieriiuri.eclesial_arrecadacoes.service;
 
 import com.ranieriiuri.eclesial_arrecadacoes.domain.model.Venda;
 import com.ranieriiuri.eclesial_arrecadacoes.domain.repository.VendaRepository;
+import com.ranieriiuri.eclesial_arrecadacoes.dto.RelatorioVendasDTO;
 import com.ranieriiuri.eclesial_arrecadacoes.dto.VendaResumoDTO;
 import com.ranieriiuri.eclesial_arrecadacoes.tenant.TenantContext;
 import org.springframework.stereotype.Service;
@@ -47,5 +48,18 @@ public class VendaService {
         )).toList();
     }
 
+    public RelatorioVendasDTO gerarRelatorioPorPeriodo(LocalDateTime inicio, LocalDateTime fim) {
+        UUID igrejaId = TenantContext.getCurrentTenant();
+        return vendaRepository.somarRelatorioPorPeriodo(igrejaId, inicio, fim);
+    }
 
+    public RelatorioVendasDTO gerarRelatorioTotal() {
+        UUID igrejaId = TenantContext.getCurrentTenant();
+        return vendaRepository.somarRelatorioTotal(igrejaId);
+    }
+
+    public RelatorioVendasDTO gerarRelatorioPorEvento(UUID eventoId) {
+        UUID igrejaId = TenantContext.getCurrentTenant();
+        return vendaRepository.somarRelatorioPorEvento(igrejaId, eventoId);
+    }
 }

@@ -1,7 +1,9 @@
 package com.ranieriiuri.eclesial_arrecadacoes.domain.repository;
 
 import com.ranieriiuri.eclesial_arrecadacoes.domain.model.Venda;
+import com.ranieriiuri.eclesial_arrecadacoes.dto.RelatorioVendasDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -19,4 +21,26 @@ public interface VendaRepository extends JpaRepository<Venda, UUID> {
 
     // 🔸 Listar todas as vendas de uma igreja
     List<Venda> findByIgrejaId(UUID igrejaId);
+
+    @Query("""
+    SELECT new com.seu.pacote.RelatorioVendasDTO(COUNT(v), SUM(v.quantidade), SUM(v.valorTotal))
+    FROM Venda v
+    WHERE v.igreja.id = :igrejaId AND v.data BETWEEN :inicio AND :fim
+""")
+    RelatorioVendasDTO somarRelatorioPorPeriodo(UUID igrejaId, LocalDateTime inicio, LocalDateTime fim);
+
+    @Query("""
+    SELECT new com.seu.pacote.RelatorioVendasDTO(COUNT(v), SUM(v.quantidade), SUM(v.valorTotal))
+    FROM Venda v
+    WHERE v.igreja.id = :igrejaId
+""")
+    RelatorioVendasDTO somarRelatorioTotal(UUID igrejaId);
+
+    @Query("""
+    SELECT new com.seu.pacote.RelatorioVendasDTO(COUNT(v), SUM(v.quantidade), SUM(v.valorTotal))
+    FROM Venda v
+    WHERE v.igreja.id = :igrejaId AND v.evento.id = :eventoId
+""")
+    RelatorioVendasDTO somarRelatorioPorEvento(UUID igrejaId, UUID eventoId);
+
 }
