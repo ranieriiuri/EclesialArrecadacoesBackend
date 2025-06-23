@@ -4,9 +4,11 @@ import com.ranieriiuri.eclesial_arrecadacoes.domain.model.Doacao;
 import com.ranieriiuri.eclesial_arrecadacoes.dto.RankingDoadorDTO;
 import com.ranieriiuri.eclesial_arrecadacoes.service.DoacaoService;
 import jakarta.validation.Valid;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -55,9 +57,18 @@ public class DoacaoController {
     }
 
     // 🔹 Obter ranking de doadores da igreja atual
-    @GetMapping("/ranking")
-    public ResponseEntity<List<RankingDoadorDTO>> obterRankingDoadores() {
+    @GetMapping("/ranking-total")
+    public ResponseEntity<List<RankingDoadorDTO>> rankingDoadores() {
         List<RankingDoadorDTO> ranking = doacaoService.obterRankingDoadores();
+        return ResponseEntity.ok(ranking);
+    }
+
+    @GetMapping("/ranking-por-periodo")
+    public ResponseEntity<List<RankingDoadorDTO>> rankingPorPeriodo(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dataInicio,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dataFim
+    ) {
+        List<RankingDoadorDTO> ranking = doacaoService.obterRankingPorPeriodo(dataInicio, dataFim);
         return ResponseEntity.ok(ranking);
     }
 }

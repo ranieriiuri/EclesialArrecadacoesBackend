@@ -7,6 +7,7 @@ import com.ranieriiuri.eclesial_arrecadacoes.tenant.TenantContext;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -44,5 +45,14 @@ public class DoacaoService {
     public List<RankingDoadorDTO> obterRankingDoadores() {
         UUID igrejaId = TenantContext.getCurrentTenant();
         return doacaoRepository.obterRankingDoadores(igrejaId);
+    }
+
+    public List<RankingDoadorDTO> obterRankingPorPeriodo(LocalDateTime inicio, LocalDateTime fim) {
+        if (inicio.isAfter(fim)) {
+            throw new IllegalArgumentException("Data de início não pode ser depois da data de fim.");
+        }
+
+        UUID igrejaId = TenantContext.getCurrentTenant();
+        return doacaoRepository.obterRankingDoadoresPorPeriodo(igrejaId, inicio, fim);
     }
 }

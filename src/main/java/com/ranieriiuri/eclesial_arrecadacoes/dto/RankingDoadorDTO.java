@@ -9,7 +9,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class RankingDoadorDTO {
     private UUID doadorId;
-    private String nome;
+    private String nomeDoador;      // bate com alias 'nomeDoador'
     private long totalDoacoes;
-    private int totalPecas;
+    private int totalPecasDoadas;   // bate com alias 'totalPecasDoadas'
 }
