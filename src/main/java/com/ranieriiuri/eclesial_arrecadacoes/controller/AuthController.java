@@ -1,13 +1,17 @@
 package com.ranieriiuri.eclesial_arrecadacoes.controller;
 
+import com.ranieriiuri.eclesial_arrecadacoes.security.dto.UserResponse;
 import com.ranieriiuri.eclesial_arrecadacoes.service.AuthService;
 import com.ranieriiuri.eclesial_arrecadacoes.security.dto.AuthRequest;
 import com.ranieriiuri.eclesial_arrecadacoes.security.dto.AuthResponse;
 import com.ranieriiuri.eclesial_arrecadacoes.security.dto.RegisterRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import com.ranieriiuri.eclesial_arrecadacoes.security.details.UsuarioDetails;
 /**
  * Controller responsável pela autenticação de usuários (login e registro).
  * Recebe e valida os dados de entrada e delega a lógica para o AuthService.
@@ -33,5 +37,18 @@ public class AuthController {
     public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
         return ResponseEntity.ok(authService.register(request));
     }
+
+    @GetMapping("/me")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<UserResponse> me(@AuthenticationPrincipal UsuarioDetails usuarioDetails) {
+        return ResponseEntity.ok(new UserResponse(
+                usuarioDetails.getId(),
+                usuarioDetails.getNome(),    // ✅ agora disponível
+                usuarioDetails.getUsername(),   // ou getEmail()
+                usuarioDetails.getIgrejaId(),
+                usuarioDetails.getCargo()
+        ));
+    }
+
 
 }

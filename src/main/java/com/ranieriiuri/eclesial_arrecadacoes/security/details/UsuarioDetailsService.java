@@ -21,6 +21,7 @@ public class UsuarioDetailsService implements UserDetailsService {
 
         return new UsuarioDetails(
                 usuario.getId(),
+                usuario.getNome(), // ✅ adiciona aqui
                 usuario.getEmail(),
                 usuario.getSenhaHash(), // ou getSenha(), dependendo do nome
                 usuario.getIgreja().getId(),

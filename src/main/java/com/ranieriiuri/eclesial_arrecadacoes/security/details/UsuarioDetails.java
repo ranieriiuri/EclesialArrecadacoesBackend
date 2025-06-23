@@ -8,13 +8,15 @@ import java.util.UUID;
 
 public class UsuarioDetails implements UserDetails {
     private UUID id;
+    private String nome; // ✅ novo campo
     private String email;
     private String senha;
     private UUID igrejaId;
     private String cargo;
 
-    public UsuarioDetails(UUID id, String email, String senha, UUID igrejaId, String cargo) {
+    public UsuarioDetails(UUID id, String nome, String email, String senha, UUID igrejaId, String cargo) {
         this.id = id;
+        this.nome = nome;
         this.email = email;
         this.senha = senha;
         this.igrejaId = igrejaId;
@@ -28,6 +30,8 @@ public class UsuarioDetails implements UserDetails {
     public UUID getIgrejaId() {
         return igrejaId;
     }
+
+    public String getNome() { return nome; }
 
     public String getCargo() {
         return cargo;
