@@ -2,6 +2,7 @@ package com.ranieriiuri.eclesial_arrecadacoes.controller;
 
 import com.ranieriiuri.eclesial_arrecadacoes.domain.model.Venda;
 import com.ranieriiuri.eclesial_arrecadacoes.dto.RegistrarVendaRequestDTO;
+import com.ranieriiuri.eclesial_arrecadacoes.dto.RelatorioVendasDTO;
 import com.ranieriiuri.eclesial_arrecadacoes.dto.VendaResumoDTO;
 import com.ranieriiuri.eclesial_arrecadacoes.service.VendaService;
 import com.ranieriiuri.eclesial_arrecadacoes.service.facade.VendaFacadeService;
