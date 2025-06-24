@@ -4,6 +4,7 @@ import com.ranieriiuri.eclesial_arrecadacoes.domain.model.Igreja;
 import com.ranieriiuri.eclesial_arrecadacoes.domain.repository.IgrejaRepository;
 import com.ranieriiuri.eclesial_arrecadacoes.security.dto.AuthRequest;
 import com.ranieriiuri.eclesial_arrecadacoes.security.dto.AuthResponse;
+import com.ranieriiuri.eclesial_arrecadacoes.security.dto.AuthUserResponse;
 import com.ranieriiuri.eclesial_arrecadacoes.security.dto.RegisterRequest;
 import com.ranieriiuri.eclesial_arrecadacoes.security.dto.UserResponse;
 import com.ranieriiuri.eclesial_arrecadacoes.security.jwt.JwtService;
@@ -58,14 +59,11 @@ public class AuthService {
             String token = jwtService.generateToken(usuario.getEmail(), usuario.getIgreja().getId());
 
             // Monta o DTO com os dados do usuário
-            UserResponse userResponse = new UserResponse(
+            AuthUserResponse userResponse = new AuthUserResponse(
                     usuario.getId(),
                     usuario.getNome(),
                     usuario.getEmail(),
-                    usuario.getCargo(),
-                    usuario.getFotoPerfil(), // pode estar null inicialmente
-                    usuario.getIgreja().getId(),
-                    usuario.getIgreja().getNome()
+                    usuario.getIgreja().getId()
             );
 
             return new AuthResponse(token, userResponse);
