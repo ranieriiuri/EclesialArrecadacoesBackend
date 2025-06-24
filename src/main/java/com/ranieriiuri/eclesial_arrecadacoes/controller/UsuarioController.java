@@ -16,8 +16,8 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/usuarios")
-@SecurityRequirement(name = "bearer-key")
+@RequestMapping("/users")
+@SecurityRequirement(name = "bearerAuth")
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
@@ -41,14 +41,14 @@ public class UsuarioController {
     }
 
     // 🔹 Alterar senha
-    @PutMapping("/alterar-senha")
+    @PutMapping("/change-password")
     public ResponseEntity<Void> alterarSenha(@Valid @RequestBody AlterarSenhaRequest request) {
         usuarioService.alterarSenhaUsuarioLogado(request);
         return ResponseEntity.noContent().build();
     }
 
     // 🔹 Atualizar foto de perfil
-    @PutMapping("/me/foto")
+    @PutMapping("/me/photo")
     public ResponseEntity<String> atualizarFotoPerfil(@RequestHeader("Authorization") String authHeader,
                                                       @RequestParam("foto") MultipartFile foto) {
         String email = extractEmailFromHeader(authHeader);
@@ -58,7 +58,7 @@ public class UsuarioController {
     }
 
     // 🔹 Listar usuários da igreja (tenant atual)
-    @GetMapping("/usuarios")
+    @GetMapping("/all")
     public ResponseEntity<List<Usuario>> listarTodosUsuarios() {
         List<Usuario> usuarios = usuarioService.listarTodosUsuarios(); // ✅ Filtrando por tenant internamente
         return ResponseEntity.ok(usuarios);
@@ -70,7 +70,7 @@ public class UsuarioController {
     }
 
     // Endpoints para acesso para montagem do usuario type no frontend e atualização
-    @GetMapping("/me-completo")
+    @GetMapping("/me/data")
     public ResponseEntity<UsuarioDTO> buscarUsuarioCompleto(@RequestHeader("Authorization") String authHeader) {
         String email = extractEmailFromHeader(authHeader);
         Usuario usuario = usuarioService.buscarUsuarioPorEmail(email);
@@ -78,7 +78,7 @@ public class UsuarioController {
         return ResponseEntity.ok(dto);
     }
 
-    @PutMapping("/me-completo")
+    @PutMapping("/me/data")
     public ResponseEntity<UsuarioDTO> atualizarUsuario(
             @RequestHeader("Authorization") String authHeader,
             @RequestBody @Valid UsuarioDTO dadosAtualizados) {
@@ -89,7 +89,7 @@ public class UsuarioController {
     }
 
     // 🔹 Excluir conta do usuário autenticado
-    @DeleteMapping("/deletar")
+    @DeleteMapping("/delete")
     public ResponseEntity<String> excluirUsuario(@RequestHeader("Authorization") String authHeader) {
         String email = extractEmailFromHeader(authHeader);
         usuarioService.excluirUsuario(email);

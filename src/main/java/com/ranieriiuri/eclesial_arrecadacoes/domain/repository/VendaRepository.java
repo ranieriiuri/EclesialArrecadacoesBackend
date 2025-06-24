@@ -23,21 +23,21 @@ public interface VendaRepository extends JpaRepository<Venda, UUID> {
     List<Venda> findByIgrejaId(UUID igrejaId);
 
     @Query("""
-    SELECT new com.seu.pacote.RelatorioVendasDTO(COUNT(v), SUM(v.quantidade), SUM(v.valorTotal))
+    SELECT new com.ranieriiuri.eclesial_arrecadacoes.dto.RelatorioVendasDTO(COUNT(v), SUM(v.quantidade), SUM(v.valorArrecadado))
     FROM Venda v
-    WHERE v.igreja.id = :igrejaId AND v.data BETWEEN :inicio AND :fim
+    WHERE v.igreja.id = :igrejaId AND v.dataVenda BETWEEN :inicio AND :fim
 """)
     RelatorioVendasDTO somarRelatorioPorPeriodo(UUID igrejaId, LocalDateTime inicio, LocalDateTime fim);
 
     @Query("""
-    SELECT new com.seu.pacote.RelatorioVendasDTO(COUNT(v), SUM(v.quantidade), SUM(v.valorTotal))
+    SELECT new com.ranieriiuri.eclesial_arrecadacoes.dto.RelatorioVendasDTO(COUNT(v), SUM(v.quantidade), SUM(v.valorArrecadado))
     FROM Venda v
     WHERE v.igreja.id = :igrejaId
 """)
     RelatorioVendasDTO somarRelatorioTotal(UUID igrejaId);
 
     @Query("""
-    SELECT new com.seu.pacote.RelatorioVendasDTO(COUNT(v), SUM(v.quantidade), SUM(v.valorTotal))
+    SELECT new com.ranieriiuri.eclesial_arrecadacoes.dto.RelatorioVendasDTO(COUNT(v), SUM(v.quantidade), SUM(v.valorArrecadado))
     FROM Venda v
     WHERE v.igreja.id = :igrejaId AND v.evento.id = :eventoId
 """)
