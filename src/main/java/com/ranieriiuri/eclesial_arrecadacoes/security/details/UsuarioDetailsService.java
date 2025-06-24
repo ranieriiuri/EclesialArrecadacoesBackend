@@ -27,10 +27,7 @@ public class UsuarioDetailsService implements UserDetailsService {
                 usuario.getNome(),                         // <- novo campo
                 usuario.getEmail(),
                 usuario.getSenhaHash(),
-                usuario.getCargo(),
-                usuario.getFotoPerfil(),
-                usuario.getIgreja().getId(),
-                usuario.getIgreja().getNome()
+                usuario.getIgreja().getId()
         );
     }
 }

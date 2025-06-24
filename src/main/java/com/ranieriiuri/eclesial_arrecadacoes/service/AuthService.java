@@ -5,6 +5,7 @@ import com.ranieriiuri.eclesial_arrecadacoes.domain.repository.IgrejaRepository;
 import com.ranieriiuri.eclesial_arrecadacoes.security.dto.AuthRequest;
 import com.ranieriiuri.eclesial_arrecadacoes.security.dto.AuthResponse;
 import com.ranieriiuri.eclesial_arrecadacoes.security.dto.RegisterRequest;
+import com.ranieriiuri.eclesial_arrecadacoes.security.dto.UserResponse;
 import com.ranieriiuri.eclesial_arrecadacoes.security.jwt.JwtService;
 import com.ranieriiuri.eclesial_arrecadacoes.domain.model.Usuario;
 import com.ranieriiuri.eclesial_arrecadacoes.domain.repository.UsuarioRepository;
@@ -41,6 +42,7 @@ public class AuthService {
 
     public AuthResponse login(AuthRequest request) {
         try {
+            // Autentica o usuário
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             request.getEmail(),
@@ -48,12 +50,25 @@ public class AuthService {
                     )
             );
 
+            // Busca o usuário no banco
             Usuario usuario = usuarioRepository.findByEmail(request.getEmail())
                     .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
+            // Gera token JWT com o ID da igreja
             String token = jwtService.generateToken(usuario.getEmail(), usuario.getIgreja().getId());
 
-            return new AuthResponse(token);
+            // Monta o DTO com os dados do usuário
+            UserResponse userResponse = new UserResponse(
+                    usuario.getId(),
+                    usuario.getNome(),
+                    usuario.getEmail(),
+                    usuario.getCargo(),
+                    usuario.getFotoPerfil(), // pode estar null inicialmente
+                    usuario.getIgreja().getId(),
+                    usuario.getIgreja().getNome()
+            );
+
+            return new AuthResponse(token, userResponse);
 
         } catch (AuthenticationException e) {
             throw new RuntimeException("Credenciais inválidas");
@@ -101,8 +116,22 @@ public class AuthService {
 
         usuarioRepository.save(novoUsuario);
 
+        // Gera o token JWT
         String token = jwtService.generateToken(novoUsuario.getEmail(), igreja.getId());
-        return new AuthResponse(token);
+
+        // Cria o DTO de resposta com os dados do usuário
+        UserResponse userResponse = new UserResponse(
+                novoUsuario.getId(),
+                novoUsuario.getNome(),
+                novoUsuario.getEmail(),
+                novoUsuario.getCargo(),
+                novoUsuario.getFotoPerfil(), // pode ser null no momento do cadastro
+                igreja.getId(),
+                igreja.getNome()
+        );
+
+        return new AuthResponse(token, userResponse);
     }
+
 
 }

@@ -7,12 +7,9 @@ import java.util.UUID;
 
 @Getter
 @AllArgsConstructor
-public class UserResponse {
+public class AuthUserResponse {
     private UUID id;
     private String nome;
     private String email;
-    private String cargo;
-    private String fotoPerfil;
     private UUID igrejaId;
-    private String igrejaNome;
 }

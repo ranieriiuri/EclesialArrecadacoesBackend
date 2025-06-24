@@ -1,6 +1,6 @@
 package com.ranieriiuri.eclesial_arrecadacoes.controller;
 
-import com.ranieriiuri.eclesial_arrecadacoes.security.dto.UserResponse;
+import com.ranieriiuri.eclesial_arrecadacoes.security.dto.AuthUserResponse;
 import com.ranieriiuri.eclesial_arrecadacoes.service.AuthService;
 import com.ranieriiuri.eclesial_arrecadacoes.security.dto.AuthRequest;
 import com.ranieriiuri.eclesial_arrecadacoes.security.dto.AuthResponse;
@@ -40,18 +40,14 @@ public class AuthController {
 
     @GetMapping("/me")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<UserResponse> me(@AuthenticationPrincipal UsuarioDetails usuarioDetails) {
-        return ResponseEntity.ok(new UserResponse(
+    public ResponseEntity<AuthUserResponse> me(@AuthenticationPrincipal UsuarioDetails usuarioDetails) {
+        AuthUserResponse response = new AuthUserResponse(
                 usuarioDetails.getId(),
-                usuarioDetails.getNome(),          // nome completo do usuário
-                usuarioDetails.getEmail(),         // email (caso queira trocar para .getUsername(), também funciona)
-                usuarioDetails.getCargo(),
-                usuarioDetails.getFotoPerfil(),
-                usuarioDetails.getIgrejaId(),
-                usuarioDetails.getIgrejaNome()
-        ));
+                usuarioDetails.getNome(),
+                usuarioDetails.getEmail(),
+                usuarioDetails.getIgrejaId()
+        );
+        return ResponseEntity.ok(response);
     }
-
-
 
 }
