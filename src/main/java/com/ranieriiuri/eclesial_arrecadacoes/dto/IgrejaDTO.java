@@ -9,7 +9,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class IgrejaRespostaDTO {
+public class IgrejaDTO {
     private UUID id;
     private String nome;
     private String cnpj;

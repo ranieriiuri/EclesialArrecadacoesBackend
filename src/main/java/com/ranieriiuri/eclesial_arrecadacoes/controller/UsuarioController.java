@@ -2,6 +2,7 @@ package com.ranieriiuri.eclesial_arrecadacoes.controller;
 
 import com.ranieriiuri.eclesial_arrecadacoes.domain.model.Usuario;
 import com.ranieriiuri.eclesial_arrecadacoes.dto.AlterarSenhaRequest;
+import com.ranieriiuri.eclesial_arrecadacoes.dto.UsuarioDTO;
 import com.ranieriiuri.eclesial_arrecadacoes.security.jwt.JwtService;
 import com.ranieriiuri.eclesial_arrecadacoes.service.CloudinaryService;
 import com.ranieriiuri.eclesial_arrecadacoes.service.UsuarioService;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -32,29 +32,12 @@ public class UsuarioController {
         this.cloudinaryService = cloudinaryService;
     }
 
-    // 🔹 Buscar dados do usuário autenticado
-    @GetMapping("/dados")
-    public ResponseEntity<Usuario> buscarUsuarioPorEmail(@RequestHeader("Authorization") String authHeader) {
-        String email = extractEmailFromHeader(authHeader);
-        Usuario usuario = usuarioService.buscarUsuarioPorEmail(email);
-        return ResponseEntity.ok(usuario);
-    }
-
     // 🔹 Buscar usuário por ID (uso técnico ou administrativo)
     @GetMapping("/{id}")
-    public ResponseEntity<Usuario> buscarPorId(@PathVariable UUID id) {
+    public ResponseEntity<Usuario> buscarUsuarioPorId(@PathVariable UUID id) {
         return usuarioService.buscarPorId(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
-    }
-
-    // 🔹 Atualizar dados pessoais
-    @PutMapping("/dados")
-    public ResponseEntity<Usuario> atualizarUsuarioLogado(@RequestHeader("Authorization") String authHeader,
-                                                          @Valid @RequestBody Usuario updatedData) {
-        String email = extractEmailFromHeader(authHeader);
-        Usuario updated = usuarioService.atualizarUsuarioLogado(email, updatedData);
-        return ResponseEntity.ok(updated);
     }
 
     // 🔹 Alterar senha
@@ -65,7 +48,7 @@ public class UsuarioController {
     }
 
     // 🔹 Atualizar foto de perfil
-    @PutMapping("/dados/foto")
+    @PutMapping("/me/foto")
     public ResponseEntity<String> atualizarFotoPerfil(@RequestHeader("Authorization") String authHeader,
                                                       @RequestParam("foto") MultipartFile foto) {
         String email = extractEmailFromHeader(authHeader);
@@ -81,16 +64,35 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarios);
     }
 
-    // 🔹 Excluir conta do usuário autenticado
-    @DeleteMapping("/deletar")
-    public ResponseEntity<String> excluirUsuarioLogado(@RequestHeader("Authorization") String authHeader) {
-        String email = extractEmailFromHeader(authHeader);
-        usuarioService.excluirUsuarioLogado(email);
-        return ResponseEntity.ok("Usuário excluído com sucesso.");
-    }
-
     // 🔒 Utilitário privado para extrair e-mail do token JWT
     private String extractEmailFromHeader(String authHeader) {
         return jwtService.extractEmail(authHeader.replace("Bearer ", ""));
+    }
+
+    // Endpoints para acesso para montagem do usuario type no frontend e atualização
+    @GetMapping("/me-completo")
+    public ResponseEntity<UsuarioDTO> buscarUsuarioCompleto(@RequestHeader("Authorization") String authHeader) {
+        String email = extractEmailFromHeader(authHeader);
+        Usuario usuario = usuarioService.buscarUsuarioPorEmail(email);
+        UsuarioDTO dto = usuarioService.toDTO(usuario); // ou usuarioMapper.toDTO(...)
+        return ResponseEntity.ok(dto);
+    }
+
+    @PutMapping("/me-completo")
+    public ResponseEntity<UsuarioDTO> atualizarUsuario(
+            @RequestHeader("Authorization") String authHeader,
+            @RequestBody @Valid UsuarioDTO dadosAtualizados) {
+
+        String email = extractEmailFromHeader(authHeader);
+        Usuario usuarioAtualizado = usuarioService.atualizarUsuario(email, dadosAtualizados);
+        return ResponseEntity.ok(usuarioService.toDTO(usuarioAtualizado));
+    }
+
+    // 🔹 Excluir conta do usuário autenticado
+    @DeleteMapping("/deletar")
+    public ResponseEntity<String> excluirUsuario(@RequestHeader("Authorization") String authHeader) {
+        String email = extractEmailFromHeader(authHeader);
+        usuarioService.excluirUsuario(email);
+        return ResponseEntity.ok("Usuário excluído com sucesso.");
     }
 }

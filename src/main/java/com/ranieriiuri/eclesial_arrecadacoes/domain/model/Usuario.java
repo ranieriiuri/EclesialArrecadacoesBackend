@@ -46,14 +46,14 @@ public class Usuario {
 
     private String cargo;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "endereco_id")
     private Endereco endereco;
 
     @Column(name = "foto_perfil")
     private String fotoPerfil;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "igreja_id", nullable = false)
     private Igreja igreja;
 
