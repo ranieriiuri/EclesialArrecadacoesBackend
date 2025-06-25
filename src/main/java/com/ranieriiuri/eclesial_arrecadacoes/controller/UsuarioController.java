@@ -6,9 +6,18 @@ import com.ranieriiuri.eclesial_arrecadacoes.dto.UsuarioDTO;
 import com.ranieriiuri.eclesial_arrecadacoes.security.jwt.JwtService;
 import com.ranieriiuri.eclesial_arrecadacoes.service.CloudinaryService;
 import com.ranieriiuri.eclesial_arrecadacoes.service.UsuarioService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -47,13 +56,23 @@ public class UsuarioController {
         return ResponseEntity.noContent().build(); // 204 No Content
     }
 
-    // 🔹 Atualizar foto de perfil
-    @PutMapping("/me/photo")
-    public ResponseEntity<String> atualizarFotoPerfil(@RequestHeader("Authorization") String authHeader,
-                                                      @RequestParam("foto") MultipartFile foto) {
+    @Operation(summary = "Atualiza a foto de perfil do usuário logado")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Foto atualizada com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Erro ao processar upload")
+    })
+    @PutMapping(value = "/me/photo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> atualizarFotoPerfil(
+            @RequestHeader("Authorization") String authHeader,
+            @Parameter(description = "Imagem da nova foto de perfil",
+                    content = @Content(mediaType = MediaType.MULTIPART_FORM_DATA_VALUE,
+                            schema = @Schema(type = "string", format = "binary")))
+            @RequestParam("foto") MultipartFile foto) {
+
         String email = extractEmailFromHeader(authHeader);
         String urlFoto = cloudinaryService.uploadImage(foto);
         usuarioService.atualizarFotoPerfil(email, urlFoto);
+
         return ResponseEntity.ok(urlFoto);
     }
 
@@ -80,10 +99,10 @@ public class UsuarioController {
 
     @PutMapping("/me/data")
     public ResponseEntity<UsuarioDTO> atualizarUsuario(
-            @RequestHeader("Authorization") String authHeader,
+            @AuthenticationPrincipal UserDetails userDetails,
             @RequestBody @Valid UsuarioDTO dadosAtualizados) {
 
-        String email = extractEmailFromHeader(authHeader);
+        String email = userDetails.getUsername();
         Usuario usuarioAtualizado = usuarioService.atualizarUsuario(email, dadosAtualizados);
         return ResponseEntity.ok(usuarioService.toDTO(usuarioAtualizado));
     }
