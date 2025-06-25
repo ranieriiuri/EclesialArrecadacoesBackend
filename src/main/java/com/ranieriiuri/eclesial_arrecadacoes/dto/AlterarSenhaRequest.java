@@ -14,6 +14,4 @@ public class AlterarSenhaRequest {
     @NotBlank(message = "A nova senha é obrigatória.")
     private String novaSenha;
 
-    @NotBlank(message = "Confirmar senha é obrigatório.")
-    private String confirmarSenha;
 }

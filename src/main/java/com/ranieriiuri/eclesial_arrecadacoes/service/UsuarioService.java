@@ -53,10 +53,6 @@ public class UsuarioService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Senha atual incorreta.");
         }
 
-        if (!request.getNovaSenha().equals(request.getConfirmarSenha())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nova senha e confirmação não coincidem.");
-        }
-
         String novaSenha = request.getNovaSenha();
 
         if (novaSenha.length() < 6 ||
