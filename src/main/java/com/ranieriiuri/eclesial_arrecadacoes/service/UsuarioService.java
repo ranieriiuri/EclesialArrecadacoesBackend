@@ -6,6 +6,7 @@ import com.ranieriiuri.eclesial_arrecadacoes.dto.AlterarSenhaRequest;
 import com.ranieriiuri.eclesial_arrecadacoes.tenant.TenantContext;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,6 +16,7 @@ import com.ranieriiuri.eclesial_arrecadacoes.domain.model.Igreja;
 import com.ranieriiuri.eclesial_arrecadacoes.dto.UsuarioDTO;
 import com.ranieriiuri.eclesial_arrecadacoes.dto.EnderecoDTO;
 import com.ranieriiuri.eclesial_arrecadacoes.dto.IgrejaDTO;
+import org.springframework.web.server.ResponseStatusException;
 
 
 import java.util.List;
@@ -42,16 +44,30 @@ public class UsuarioService {
     }
 
     @Transactional
-    public void alterarSenhaUsuarioLogado(AlterarSenhaRequest request) {
+    public void alterarSenha(AlterarSenhaRequest request) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
 
         if (!passwordEncoder.matches(request.getSenhaAtual(), usuario.getSenhaHash())) {
-            throw new IllegalArgumentException("Senha atual incorreta.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Senha atual incorreta.");
         }
 
-        usuario.setSenhaHash(passwordEncoder.encode(request.getNovaSenha()));
+        if (!request.getNovaSenha().equals(request.getConfirmarSenha())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nova senha e confirmação não coincidem.");
+        }
+
+        String novaSenha = request.getNovaSenha();
+
+        if (novaSenha.length() < 6 ||
+                !novaSenha.matches(".*[A-Z].*") ||
+                !novaSenha.matches(".*[a-z].*") ||
+                !novaSenha.matches(".*\\d.*")) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "A nova senha deve ter pelo menos 6 caracteres, incluindo uma letra maiúscula, uma letra minúscula e um número.");
+        }
+
+        usuario.setSenhaHash(passwordEncoder.encode(novaSenha));
         usuarioRepository.save(usuario);
     }
 

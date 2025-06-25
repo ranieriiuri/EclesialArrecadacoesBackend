@@ -43,8 +43,8 @@ public class UsuarioController {
     // 🔹 Alterar senha
     @PutMapping("/change-password")
     public ResponseEntity<Void> alterarSenha(@Valid @RequestBody AlterarSenhaRequest request) {
-        usuarioService.alterarSenhaUsuarioLogado(request);
-        return ResponseEntity.noContent().build();
+        usuarioService.alterarSenha(request);
+        return ResponseEntity.noContent().build(); // 204 No Content
     }
 
     // 🔹 Atualizar foto de perfil
