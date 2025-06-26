@@ -34,13 +34,13 @@ public class DoacaoController {
 
     // 🔹 Listar todas as doações da igreja atual
     @GetMapping
-    public ResponseEntity<List<Doacao>> listarPorIgrejaAtual() {
+    public ResponseEntity<List<Doacao>> listarTodasDoacoes() {
         return ResponseEntity.ok(doacaoService.listarPorIgrejaAtual());
     }
 
     // 🔹 Listar doações por doador
     @GetMapping("/doador/{doadorId}")
-    public ResponseEntity<List<Doacao>> listarPorDoador(@PathVariable UUID doadorId) {
+    public ResponseEntity<List<Doacao>> listarDoacoesPorDoador(@PathVariable UUID doadorId) {
         return ResponseEntity.ok(doacaoService.listarPorDoador(doadorId));
     }
 
@@ -52,7 +52,7 @@ public class DoacaoController {
 
     // 🔹 Buscar uma doação por ID
     @GetMapping("/{id}")
-    public ResponseEntity<Doacao> buscarPorId(@PathVariable UUID id) {
+    public ResponseEntity<Doacao> buscarDoacaoPorId(@PathVariable UUID id) {
         return ResponseEntity.ok(doacaoService.buscarPorId(id));
     }
 
@@ -64,7 +64,7 @@ public class DoacaoController {
     }
 
     @GetMapping("/ranking-por-periodo")
-    public ResponseEntity<List<RankingDoadorDTO>> rankingPorPeriodo(
+    public ResponseEntity<List<RankingDoadorDTO>> rankingDoadoresPorPeriodo(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dataInicio,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dataFim
     ) {
