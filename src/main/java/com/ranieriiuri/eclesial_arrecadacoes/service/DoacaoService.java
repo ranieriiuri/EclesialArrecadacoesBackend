@@ -33,10 +33,6 @@ public class DoacaoService {
         return doacaoRepository.findByDoadorId(doadorId);
     }
 
-    public List<Doacao> listarPorPeca(UUID pecaId) {
-        return doacaoRepository.findByPecaId(pecaId);
-    }
-
     public Doacao buscarPorId(UUID id) {
         return doacaoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Doação não encontrada"));

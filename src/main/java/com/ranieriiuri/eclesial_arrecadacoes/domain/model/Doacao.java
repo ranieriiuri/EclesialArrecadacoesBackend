@@ -23,10 +23,9 @@ public class Doacao {
     @UuidGenerator
     private UUID id;
 
-    @NotNull(message = "A peça é obrigatória")
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "peca_id", nullable = false)
-    private Peca peca;
+    @NotNull(message = "O nome da peça é obrigatório")
+    @Column(name = "nome_peca", nullable = false)
+    private String nomePeca;
 
     @NotNull(message = "O doador é obrigatório")
     @ManyToOne(optional = false)

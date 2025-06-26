@@ -91,7 +91,7 @@ public class CadastroPecaFacadeService {
         eventPublisher.publishEvent(new PecaCriadaEvent(this, peca));
 
         Doacao doacao = Doacao.builder()
-                .peca(peca)
+                .nomePeca(peca.getNome())
                 .doador(doador)
                 .quantidade(request.getQuantidade())
                 .dataDoacao(LocalDateTime.now())

@@ -44,12 +44,6 @@ public class DoacaoController {
         return ResponseEntity.ok(doacaoService.listarPorDoador(doadorId));
     }
 
-    // 🔹 Listar doações por peça
-    @GetMapping("/peca/{pecaId}")
-    public ResponseEntity<List<Doacao>> listarPorPeca(@PathVariable UUID pecaId) {
-        return ResponseEntity.ok(doacaoService.listarPorPeca(pecaId));
-    }
-
     // 🔹 Buscar uma doação por ID
     @GetMapping("/{id}")
     public ResponseEntity<Doacao> buscarDoacaoPorId(@PathVariable UUID id) {

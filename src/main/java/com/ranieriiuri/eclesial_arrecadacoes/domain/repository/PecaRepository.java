@@ -2,6 +2,7 @@ package com.ranieriiuri.eclesial_arrecadacoes.domain.repository;
 
 import com.ranieriiuri.eclesial_arrecadacoes.domain.model.Peca;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -17,5 +18,5 @@ public interface PecaRepository extends JpaRepository<Peca, UUID> {
 
     List<Peca> findByIgrejaIdAndDisponivelTrue(UUID igrejaId);
 
-    List<Peca> findByIgrejaIdAndCategoria(UUID igrejaId, String categoria);
+    List<Peca> findByIgrejaIdAndCategoriaIgnoreCase(UUID igrejaId, String categoria);
 }

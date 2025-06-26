@@ -14,7 +14,6 @@ import java.util.UUID;
 public interface DoacaoRepository extends JpaRepository<Doacao, UUID> {
     List<Doacao> findByIgrejaId(UUID igrejaId);
     List<Doacao> findByDoadorId(UUID doadorId);
-    List<Doacao> findByPecaId(UUID pecaId);
 
     @Query(value = """
         SELECT 

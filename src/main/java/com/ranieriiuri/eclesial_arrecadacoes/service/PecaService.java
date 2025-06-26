@@ -76,7 +76,7 @@ public class PecaService {
 
     public List<Peca> listarPorCategoria(String categoria) {
         UUID igrejaId = TenantContext.getCurrentTenant();
-        return pecaRepository.findByIgrejaIdAndCategoria(igrejaId, categoria);
+        return pecaRepository.findByIgrejaIdAndCategoriaIgnoreCase(igrejaId, categoria);
     }
 
     public void excluirPeca(UUID id) {
