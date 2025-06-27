@@ -19,7 +19,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @SecurityRequirement(name = "bearerAuth")
 @RestController
-@RequestMapping("/vendas")
+@RequestMapping("/sales")
 public class VendaController {
 
     private final VendaFacadeService vendaFacadeService;
@@ -31,7 +31,7 @@ public class VendaController {
     }
 
     // 🔹 Registrar venda (via facade), anexando id da peça, do evento, logica de mudança na peça e etc...
-    @PostMapping
+    @PostMapping("/new")
     public ResponseEntity<Venda> registrarVenda(@Valid @RequestBody RegistrarVendaRequestDTO request) {
         Venda venda = vendaFacadeService.registrarVenda(
                 request.getPecaId(),
@@ -43,7 +43,7 @@ public class VendaController {
     }
 
     // 🔹 Relatórios por período
-    @GetMapping("/por-periodo")
+    @GetMapping("/per-range")
     public ResponseEntity<List<Venda>> listarPorPeriodo(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime inicio,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fim
@@ -52,7 +52,7 @@ public class VendaController {
     }
 
     // 🔹 Relatórios por evento
-    @GetMapping("/por-evento/{eventoId}")
+    @GetMapping("/per-event/{eventId}")
     public ResponseEntity<List<Venda>> listarPorEvento(@PathVariable UUID eventoId) {
         return ResponseEntity.ok(vendaService.listarPorEvento(eventoId));
     }
@@ -65,7 +65,7 @@ public class VendaController {
 
     //  Geradores de relatórios:
 
-    @GetMapping("/relatorios/periodo")
+    @GetMapping("/reports/range")
     public ResponseEntity<RelatorioVendasDTO> relatorioPorPeriodo(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime inicio,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fim
@@ -73,12 +73,12 @@ public class VendaController {
         return ResponseEntity.ok(vendaService.gerarRelatorioPorPeriodo(inicio, fim));
     }
 
-    @GetMapping("/relatorios/totais")
+    @GetMapping("/reports")
     public ResponseEntity<RelatorioVendasDTO> relatorioTotal() {
         return ResponseEntity.ok(vendaService.gerarRelatorioTotal());
     }
 
-    @GetMapping("/relatorios/por-evento/{eventoId}")
+    @GetMapping("/reports/per-event/{eventId}")
     public ResponseEntity<RelatorioVendasDTO> relatorioPorEvento(@PathVariable UUID eventoId) {
         return ResponseEntity.ok(vendaService.gerarRelatorioPorEvento(eventoId));
     }

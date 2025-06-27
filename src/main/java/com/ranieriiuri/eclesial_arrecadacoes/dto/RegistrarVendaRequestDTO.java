@@ -13,7 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class RegistrarVendaRequestDTO {
 
-    @NotBlank(message = "O id da peça é obrigatório.")
+    @NotNull(message = "O id da peça é obrigatório.")
     private UUID pecaId;
 
     @NotNull(message = "O ID do evento é obrigatório.")
