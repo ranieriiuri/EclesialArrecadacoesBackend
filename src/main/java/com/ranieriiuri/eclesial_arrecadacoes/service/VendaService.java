@@ -37,15 +37,17 @@ public class VendaService {
         UUID igrejaId = TenantContext.getCurrentTenant();
         List<Venda> vendas = vendaRepository.findByIgrejaId(igrejaId);
 
-        return vendas.stream().map(venda -> new VendaResumoDTO(
-                venda.getId(),
-                venda.getPeca().getNome(),
-                venda.getEvento().getTipo(),
-                venda.getComprador(),
-                venda.getQuantidade(),
-                venda.getValorArrecadado(),
-                venda.getDataVenda()
-        )).toList();
+        return vendas.stream()
+                .map(venda -> new VendaResumoDTO(
+                        venda.getId(),
+                        venda.getPecaNome(),
+                        venda.getEvento().getId(),
+                        venda.getComprador(),
+                        venda.getQuantidade(),
+                        venda.getValorArrecadado(),
+                        venda.getDataVenda()
+                ))
+                .toList();
     }
 
     public RelatorioVendasDTO gerarRelatorioPorPeriodo(LocalDateTime inicio, LocalDateTime fim) {

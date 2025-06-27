@@ -1,7 +1,10 @@
 package com.ranieriiuri.eclesial_arrecadacoes.dto;
 
 import jakarta.validation.constraints.*;
-import lombok.*;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
@@ -10,7 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class RegistrarVendaRequestDTO {
 
-    @NotNull(message = "O ID da peça é obrigatório.")
+    @NotBlank(message = "O id da peça é obrigatório.")
     private UUID pecaId;
 
     @NotNull(message = "O ID do evento é obrigatório.")
@@ -19,6 +22,6 @@ public class RegistrarVendaRequestDTO {
     @Positive(message = "A quantidade vendida deve ser positiva.")
     private int quantidadeVendida;
 
-    @NotBlank(message = "O nome do comprador é obrigatório.")
+    // Campo opcional agora
     private String comprador;
 }

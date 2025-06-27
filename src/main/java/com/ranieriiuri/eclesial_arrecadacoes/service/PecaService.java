@@ -40,6 +40,14 @@ public class PecaService {
         return pecaRepository.save(peca);
     }
 
+    public void marcarComoIndisponivel(UUID pecaId) {
+        Peca peca = buscarPorId(pecaId);
+        if (!Boolean.FALSE.equals(peca.isDisponivel())) {
+            peca.setDisponivel(false);
+            pecaRepository.save(peca);
+        }
+    }
+
     public Peca atualizarPeca(UUID id, Peca dados) {
         Peca existente = buscarPorId(id);
 

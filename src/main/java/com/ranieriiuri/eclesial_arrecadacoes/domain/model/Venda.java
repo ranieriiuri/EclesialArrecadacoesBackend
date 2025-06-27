@@ -23,9 +23,9 @@ public class Venda {
     @UuidGenerator
     private UUID id;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "peca_id", nullable = false)
-    private Peca peca;
+    @Column(name = "peca_nome")
+    private String pecaNome;
+
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "evento_id", nullable = false)

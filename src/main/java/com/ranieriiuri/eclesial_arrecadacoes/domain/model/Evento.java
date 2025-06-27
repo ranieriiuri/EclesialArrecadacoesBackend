@@ -1,7 +1,5 @@
 package com.ranieriiuri.eclesial_arrecadacoes.domain.model;
 
-import com.ranieriiuri.eclesial_arrecadacoes.domain.enums.StatusEvento;
-import com.ranieriiuri.eclesial_arrecadacoes.domain.enums.TipoEvento;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
@@ -9,8 +7,6 @@ import org.hibernate.annotations.UuidGenerator;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
-
-import com.ranieriiuri.eclesial_arrecadacoes.domain.enums.TipoEvento;
 
 @Entity
 @Table(name = "eventos")
@@ -26,9 +22,8 @@ public class Evento {
     @UuidGenerator
     private UUID id;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "tipo", columnDefinition = "tipo_evento", nullable = false)
-    private TipoEvento tipo;
+    @Column(nullable = false)
+    private String tipo;
 
     @Column(columnDefinition = "TEXT")
     private String descricao;
@@ -39,9 +34,8 @@ public class Evento {
     @Column(name = "data_fim")
     private LocalDate dataFim;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private StatusEvento status;
+    private String status;
 
     @ManyToOne
     @JoinColumn(name = "criado_por")
