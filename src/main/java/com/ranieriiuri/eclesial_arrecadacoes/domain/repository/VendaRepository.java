@@ -19,6 +19,8 @@ public interface VendaRepository extends JpaRepository<Venda, UUID> {
     // 🔸 Filtrar vendas por evento específico
     List<Venda> findByIgrejaIdAndEventoId(UUID igrejaId, UUID eventoId);
 
+    List<Venda> findByEventoId(UUID eventoId);
+
     // 🔸 Listar todas as vendas de uma igreja
     List<Venda> findByIgrejaId(UUID igrejaId);
 

@@ -52,7 +52,7 @@ public class VendaController {
     }
 
     // 🔹 Relatórios por evento
-    @GetMapping("/per-event/{eventId}")
+    @GetMapping("/event/{eventoId}")
     public ResponseEntity<List<Venda>> listarPorEvento(@PathVariable UUID eventoId) {
         return ResponseEntity.ok(vendaService.listarPorEvento(eventoId));
     }

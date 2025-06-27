@@ -1,14 +1,17 @@
 package com.ranieriiuri.eclesial_arrecadacoes.controller;
 
 import com.ranieriiuri.eclesial_arrecadacoes.domain.model.Evento;
+import com.ranieriiuri.eclesial_arrecadacoes.domain.model.Usuario;
 import com.ranieriiuri.eclesial_arrecadacoes.dto.CriarEventoRequest;
 import com.ranieriiuri.eclesial_arrecadacoes.dto.CriarEventoResponse;
 import com.ranieriiuri.eclesial_arrecadacoes.service.EventoService;
+import com.ranieriiuri.eclesial_arrecadacoes.service.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -21,9 +24,11 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 public class EventoController {
 
     private final EventoService eventoService;
+    private final UsuarioService usuarioService;
 
-    public EventoController(EventoService eventoService) {
+    public EventoController(EventoService eventoService, UsuarioService usuarioService) {
         this.eventoService = eventoService;
+        this.usuarioService = usuarioService;
     }
 
     // 🔹 Criar novo evento
@@ -84,6 +89,33 @@ public class EventoController {
     public ResponseEntity<Evento> finalizarEvento(@PathVariable UUID id) {
         Evento evento = eventoService.finalizarEvento(id);
         return ResponseEntity.ok(evento);
+    }
+
+    @GetMapping("/{id}/report")
+    public ResponseEntity<byte[]> gerarRelatorioPdf(@PathVariable("id") UUID eventoId, Principal principal) {
+        try {
+            // Pega o email/login do usuário autenticado
+            String email = principal.getName();
+
+            // Busca usuário para obter igrejaId
+            Usuario usuario = usuarioService.buscarUsuarioPorEmail(email);
+
+            UUID igrejaId = usuario.getIgreja().getId();
+
+            // Gera o PDF
+            byte[] pdfBytes = eventoService.generatePdfReport(igrejaId, eventoId);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDisposition(ContentDisposition.builder("attachment")
+                    .filename("relatorio-evento-" + eventoId + ".pdf")
+                    .build());
+
+            return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
+        } catch (Exception e) {
+            // Logue o erro aqui
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     // 🔹 Listar todos os eventos da igreja atual
