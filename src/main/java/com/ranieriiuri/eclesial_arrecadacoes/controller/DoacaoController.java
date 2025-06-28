@@ -5,6 +5,7 @@ import com.ranieriiuri.eclesial_arrecadacoes.dto.RankingDoadorDTO;
 import com.ranieriiuri.eclesial_arrecadacoes.service.DoacaoService;
 import jakarta.validation.Valid;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +17,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @SecurityRequirement(name = "bearerAuth")
 @RestController
-@RequestMapping("/doacoes")
+@RequestMapping("/donations")
 public class DoacaoController {
 
     private final DoacaoService doacaoService;
@@ -57,12 +58,19 @@ public class DoacaoController {
         return ResponseEntity.ok(ranking);
     }
 
-    @GetMapping("/ranking-por-periodo")
-    public ResponseEntity<List<RankingDoadorDTO>> rankingDoadoresPorPeriodo(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dataInicio,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dataFim
+    @GetMapping("/donors/ranking/range")
+    public ResponseEntity<List<RankingDoadorDTO>> obterRankingDoadores(
+            @RequestParam("inicio") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime inicio,
+            @RequestParam("fim") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fim
     ) {
-        List<RankingDoadorDTO> ranking = doacaoService.obterRankingPorPeriodo(dataInicio, dataFim);
-        return ResponseEntity.ok(ranking);
+        try {
+            List<RankingDoadorDTO> ranking = doacaoService.gerarRankingPorPeriodo(inicio, fim);
+            return ResponseEntity.ok(ranking);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(null);
+        } catch (Exception e) {
+            // logar erro aqui
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 }

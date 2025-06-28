@@ -7,9 +7,12 @@ import com.ranieriiuri.eclesial_arrecadacoes.tenant.TenantContext;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.*;
+import java.util.stream.Collectors;
+
+
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class DoacaoService {
@@ -43,12 +46,37 @@ public class DoacaoService {
         return doacaoRepository.obterRankingDoadores(igrejaId);
     }
 
-    public List<RankingDoadorDTO> obterRankingPorPeriodo(LocalDateTime inicio, LocalDateTime fim) {
-        if (inicio.isAfter(fim)) {
-            throw new IllegalArgumentException("Data de início não pode ser depois da data de fim.");
+    public List<RankingDoadorDTO> gerarRankingPorPeriodo(LocalDateTime inicio, LocalDateTime fim) {
+        UUID igrejaId = TenantContext.getCurrentTenant();
+
+        // Busca doações da igreja no período
+        List<Doacao> doacoes = doacaoRepository.findByIgrejaIdAndDataDoacaoBetween(igrejaId, inicio, fim);
+
+        // Agrupa doações por nome do doador, ignorando caixa
+        Map<String, List<Doacao>> agrupadoPorNome = doacoes.stream()
+                .collect(Collectors.groupingBy(d -> d.getDoador().getNome().toLowerCase()));
+
+        // Monta lista de RankingDoadorDTO
+        List<RankingDoadorDTO> ranking = new ArrayList<>();
+        for (var entry : agrupadoPorNome.entrySet()) {
+            String nome = entry.getKey();
+            List<Doacao> doacoesDoDoador = entry.getValue();
+
+            int totalPecas = doacoesDoDoador.stream()
+                    .mapToInt(Doacao::getQuantidade)
+                    .sum();
+
+            // Se tiver valor, some aqui. Senão, pode remover ou ajustar no DTO
+            int totalValor = 0; // Ajuste se tiver valor associado às doações
+
+            ranking.add(new RankingDoadorDTO(nome, totalPecas, totalValor));
         }
 
-        UUID igrejaId = TenantContext.getCurrentTenant();
-        return doacaoRepository.obterRankingDoadoresPorPeriodo(igrejaId, inicio, fim);
+        // Ordena do maior para o menor
+        ranking.sort(Comparator.comparingInt(RankingDoadorDTO::getTotalPecas).reversed());
+
+        return ranking;
     }
+
+
 }
